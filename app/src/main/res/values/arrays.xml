@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/annie_use_your_telescope</item>
+    </array>
+    <!--<string-array name="preloaded_fonts">preloaded_fonts</string-array>-->
+    <string-array name="spinnerItems">
+        <item>""</item>
+        <item>Warming Up</item>
+        <item>Arms</item>
+        <item>Sit Ups</item>
+        <item>Back</item>
+        <item>Hit and Special</item>
+    </string-array>
+</resources>

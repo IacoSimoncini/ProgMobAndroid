@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_admin"
+        android:title="@string/menu_users"
+        android:checked="true"
+        android:icon="@drawable/ic_sell"
+        />
+
+    <item
+        android:id="@+id/menu_cards"
+        android:title="@string/menu_ex"
+        android:checked="false"
+        android:icon="@drawable/ic_copy"
+        />
+
+</menu>

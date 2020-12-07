@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "223210652980",
+    "firebase_url": "https://progmob-99e17.firebaseio.com",
+    "project_id": "progmob-99e17",
+    "storage_bucket": "progmob-99e17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223210652980:android:626f173ade9843160b9161",
+        "android_client_info": {
+          "package_name": "it.iacorickvale.progettoprogmob"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "223210652980-supgpnltth4rq5it20keuk9iv5nb7n3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDbUoI1F7XGSFfgDTFuTmZ_H91K27nK2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "223210652980-supgpnltth4rq5it20keuk9iv5nb7n3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

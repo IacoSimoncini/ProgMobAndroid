@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<TextView
+        android:id="@+id/textView11"
+        android:paddingLeft="10dp"
+        android:layout_width="69dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/image"
+        android:textStyle="bold" />-->
+
+    <!--<TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginLeft="129dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/user_surname"
+        android:textStyle="bold" />-->
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:fontFamily="@font/roboto"
+        android:paddingLeft="10dp"
+        android:text="@string/user_list"
+        android:textColor="#000000"
+        android:maxLength="30"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!--<TextView
+        android:id="@+id/textView9"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="69dp"
+        android:text="@string/user_name"
+        android:textStyle="bold" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_admin"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/roboto"
+        android:textSize="24sp"
+        android:layout_height="633dp"
+        android:layout_marginTop="40dp" />
+
+</RelativeLayout>

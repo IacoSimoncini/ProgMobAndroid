@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name" colore="">WHITE-GYM</string>
+    <string name="reg_title">INSERT YOUR DATA</string>
+    <string name="signup">Sign up</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="lastname">Last name</string>
+    <string name="firstname">First name</string>
+    <string name="fullname">Full name</string>
+    <string name="errorsignup">Registration error</string>
+    <string name="inforequired">Info required</string>
+    <string name="HeaderList">Header</string>
+    <string name="creaScheda">Create Card</string>
+    <string name="eliminaScheda">Delete Cards</string>
+    <string name="register">Register</string>
+    <string name="already_registered_log_in">Already registered? Login</string>
+    <string name="logout">Logout</string>
+    <string name="login">LOGIN WITH YOUR DATA</string>
+    <string name="new_here_create_account">New here? Create Account</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="user">User</string>
+    <string name="menu_cards">Cards</string>
+    <string name="selectSource">Select source</string>
+    <string name="phone">Phone Number</string>
+    <string name="my_cards">Your Cards</string>
+    <string name="exercise_list">Exercises List</string>
+    <string name="user_list">Users List</string>
+    <string name="exercise_name">Name</string>
+    <string name="exercise_diff">Difficulty</string>
+    <string name="exercise_desc">Description</string>
+    <string name="menu_users">Users</string>
+    <string name="name_ex">Name</string>
+    <string name="desc_ex">Description</string>
+    <string name="diff_ex">Difficulty</string>
+    <string name="rename_card">Rename Card</string>
+    <string name="menu_ex">Exercises</string>
+    <string name="multi_ex">multi_ex</string>
+    <string name="name_item_choose" />
+    <string name="delete">Delete</string>
+    <string name="modify">Modify</string>
+    <string name="emptyPhoneNumber">Phone Number</string>
+    <string name="user_surname">Surname</string>
+    <string name="user_name">Name</string>
+    <string name="image">Image</string>
+</resources>
