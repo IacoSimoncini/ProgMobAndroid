@@ -93,8 +93,6 @@ public class FragmentUser extends Fragment {
             Log.d("Do nothing", "");
         }
 
-
-
         profileImage.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

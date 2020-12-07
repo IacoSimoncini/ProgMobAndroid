@@ -14,7 +14,7 @@
         android:layout_height="55dp"
         android:layout_marginLeft="5dp"
         android:layout_weight="1"
-        android:background="@drawable/rounded_fg"
+        android:foreground="@drawable/rounded_fg"
         app:srcCompat="@drawable/ic_account" />
 
     <TextView
