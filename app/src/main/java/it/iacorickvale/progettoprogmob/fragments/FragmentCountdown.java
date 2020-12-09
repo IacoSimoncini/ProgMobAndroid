@@ -1,12 +1,17 @@
 package it.iacorickvale.progettoprogmob.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import it.iacorickvale.progettoprogmob.R;
 import it.iacorickvale.progettoprogmob.utilities.Esercizi;
@@ -36,9 +42,11 @@ public class FragmentCountdown extends Fragment {
     private Button pause;
     private TextView countdown;
     private TextView currentExName;
+    private TextView currentExDiff;
     private Button StartAndStopBtn;
     private CountDownTimer countDownTimer;
-    private long timeLeftInMilliseconds = 11000; //600000
+    private long timeLeftInMilliseconds = 0;
+    private long timePauseInMilliseconds = 0;
     private boolean timerRunning;
     private ArrayList<Esercizi> listEserciziScheda = new ArrayList<>();
     private boolean inPause;
@@ -46,6 +54,7 @@ public class FragmentCountdown extends Fragment {
     private int index;
     private int lenght;
     String exCountdown[];
+    String diffCountdown[];
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +64,12 @@ public class FragmentCountdown extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.countdown_ex, container, false);
         countdown = view.findViewById(R.id.countdown);
+        currentExDiff = view.findViewById(R.id.currentExDiff);
         currentExName = view.findViewById(R.id.currentExName);
         StartAndStopBtn = view.findViewById(R.id.StartAndStopBtn);
         assert this.getArguments() != null;
+        timeLeftInMilliseconds = this.getArguments().getLong("timeLeftInMilliseconds");
+        timePauseInMilliseconds = this.getArguments().getLong("timePauseInMilliseconds");
         path = this.getArguments().getString("path");
         ref = this.getArguments().getString("ref");
         StartAndStopBtn.setText("START");
@@ -70,7 +82,7 @@ public class FragmentCountdown extends Fragment {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if(task.isSuccessful()){
                                 for(final QueryDocumentSnapshot document : task.getResult()){
-                                    listEserciziScheda.add(new Esercizi(document.get("description").toString(),
+                                    listEserciziScheda.add(new Esercizi(Objects.requireNonNull(document.get("description")).toString(),
                                             document.get("difficulty").toString(),
                                             document.get("name").toString()) );
                                 }
@@ -80,14 +92,18 @@ public class FragmentCountdown extends Fragment {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                     exCountdown = new String[listEserciziScheda.size()];
+                    diffCountdown = new String[listEserciziScheda.size()];
                     int i = 0;
                     for (Esercizi e : orderListByDiff(listEserciziScheda)){
                         exCountdown[i] = e.getName();
+                        diffCountdown[i] = e.getDifficulty();
+                        Log.d(diffCountdown[i], "onSuccess: ");
                         i+=1;
                     }
                     index = -1;
-                    currentExName.setText("Click to Start");
-                    countdown.setText("CountDown Timer");
+                    currentExDiff.setText("");
+                    currentExName.setText("READY?");
+                    countdown.setText("");
 
                 }
             });
@@ -100,6 +116,7 @@ public class FragmentCountdown extends Fragment {
                 if(firstTime){
                     firstTime = false;
                     index += 1;
+                    currentExDiff.setText(diffCountdown[index]);
                     currentExName.setText(exCountdown[index]);
                 }
                 timerRunning = !timerRunning;
@@ -130,21 +147,25 @@ public class FragmentCountdown extends Fragment {
             public void onFinish(){
                 index += 1;
                 if ((index < exCountdown.length)) {
-                    if(!controlType(exCountdown[index-1] , exCountdown[index] , orderListByDiff(listEserciziScheda)) && !inPause){
+                    if(!diffCountdown[index-1].equals(diffCountdown[index]) && !inPause){
                         inPause = true;
+                        currentExDiff.setText("BREAK");
+                        currentExName.setText("NEXT: " + diffCountdown[index]);
                         index -= 1;
-                        currentExName.setText("Time to Break");
                     }
                     else{
                         inPause = false;
+                        currentExDiff.setText(diffCountdown[index]);
                         currentExName.setText(exCountdown[index]);
                     }
                     countdown.setText("");
-                    timeLeftInMilliseconds = 11000;
+                    timeLeftInMilliseconds = timePauseInMilliseconds ;
                     startStop();
                 }else{
                     countdown.setText("END");
+                    currentExDiff.setText("");
                     currentExName.setText("");
+                    StartAndStopBtn.setVisibility(View.INVISIBLE);
                 }
             }
         }.start();
@@ -167,31 +188,6 @@ public class FragmentCountdown extends Fragment {
             //countdown.setTextColor();
         }
         countdown.setText(timeLeftText);
-    }
-
-    public boolean controlType(String a , String b, ArrayList<Esercizi> list){
-        String typeA = new String();
-        String typeB = new String();
-        boolean breakA = false;
-        boolean breakB = false;
-        for (Esercizi ex : list) {
-            if (ex.getName().equals(a)){
-                typeA = ex.getDifficulty();
-                breakA = true;
-            }
-            if (ex.getName().equals(b)){
-                typeB = ex.getDifficulty();
-                breakB = true;
-            }
-            if (breakA && breakB){
-                break;
-            }
-        }
-        if (typeA.equals(typeB)){
-            return true;
-        }else{
-            return false;
-        }
     }
 
 }

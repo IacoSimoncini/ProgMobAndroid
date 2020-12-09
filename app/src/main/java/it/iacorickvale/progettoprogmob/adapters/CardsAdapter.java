@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +50,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
     private ArrayList<Cards> struttura;
     private LayoutInflater inflater;
     private Boolean control_ifAd;
+    private long timeLeftInMilliseconds = 0;
+    private long timePauseInMilliseconds = 0;
 
     public CardsAdapter(Context ctx, ArrayList<Cards> struttura , Boolean aux) {
         this.inflater = LayoutInflater.from(ctx);
@@ -159,21 +162,71 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                 @Override
                 public void onClick(View v) {
                     if(struttura.size() > 0){
-                        try {
-                            fragmentCountdown = new FragmentCountdown();
-                            String path_scheda = struttura.get(position).getPath();
-                            String ref= struttura.get(position).getRef();
-                            Bundle args = new Bundle();
-                            args.putString("path", path_scheda);
-                            args.putString("ref", ref);
-                            fragmentCountdown.setArguments(args);
-                            FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
-                            FragmentTransaction ft = fm.beginTransaction();
-                            ft.replace(R.id.fragment_container, fragmentCountdown);
-                            ft.commit();
-                        }catch (Exception e){
-                            Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        View dialogView = inflater.inflate(R.layout.difficulty_card, null);
+                        builder.setTitle("CHOOSE DIFFICULTY");
+                        builder.setView(dialogView);
+                        final Button bEasy = dialogView.findViewById(R.id.easy_btn);
+                        final Button bMedium = dialogView.findViewById(R.id.medium_btn);
+                        final Button bHard = dialogView.findViewById(R.id.hard_btn);
+                        Button bStart = dialogView.findViewById(R.id.hard_btn);
+                        Button bGoto = dialogView.findViewById(R.id.goto_btn);
+                        bEasy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                timeLeftInMilliseconds = 150000;
+                                timePauseInMilliseconds = 600000;
+                                bEasy.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                                bHard.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                bMedium.setBackgroundColor(v.getResources().getColor(android.R.color.white));
                             }
+                        });
+                        bMedium.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                timeLeftInMilliseconds = 300000;
+                                timePauseInMilliseconds = 300000;
+                                bEasy.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                bMedium.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                                bHard.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                            }
+                        });
+                        bHard.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                timeLeftInMilliseconds = 600000;
+                                timePauseInMilliseconds = 100000;
+                                bEasy.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                bMedium.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                bHard.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                            }
+                        });
+                        bGoto.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (timePauseInMilliseconds!=0 && timeLeftInMilliseconds!=0){
+                                    try {
+                                        fragmentCountdown = new FragmentCountdown();
+                                        String path_scheda = struttura.get(position).getPath();
+                                        String ref= struttura.get(position).getRef();
+                                        Bundle args = new Bundle();
+                                        args.putLong("timeLeftInMilliseconds",  timeLeftInMilliseconds);
+                                        args.putLong("timePauseInMilliseconds", timePauseInMilliseconds);
+                                        args.putString("path", path_scheda);
+                                        args.putString("ref", ref);
+                                        fragmentCountdown.setArguments(args);
+                                        FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+                                        FragmentTransaction ft = fm.beginTransaction();
+                                        ft.replace(R.id.fragment_container, fragmentCountdown);
+                                        ft.commit();
+                                    }catch (Exception e){
+                                        Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        });
+                        builder.show();
+
                     }
                 }
             });
