@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +46,7 @@ import it.iacorickvale.progettoprogmob.utilities.Esercizi;
 import static it.iacorickvale.progettoprogmob.firebase.DatabaseReferences.getUser;
 
 
-public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder> {
+public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>{
     private Context context;
     private FragmentEsercizi fragmentEsercizi;
     private FragmentCountdown fragmentCountdown;
@@ -59,13 +62,12 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
         this.control_ifAd = aux;
         this.context = inflater.getContext();
     }
-
-    public class CViewHolder extends RecyclerView.ViewHolder {
+    public class CViewHolder extends RecyclerView.ViewHolder{
             TextView textPath;
             LinearLayout parentLayout;
             Button btnDel;
             Button btnMod;
-            Button btnPlay;
+            ImageButton btnPlay;
 
         public CViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -151,13 +153,11 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
 
             });
 
-            holder.btnPlay.setVisibility(View.INVISIBLE);
 
         } else {
             Log.d("è dunque " , "NON Admin");
             holder.btnDel.setVisibility(View.INVISIBLE);
             holder.btnMod.setVisibility(View.INVISIBLE);
-            holder.btnPlay.setVisibility(View.VISIBLE);
             holder.btnPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -237,7 +237,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
 
 
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener()
+        holder.textPath.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
@@ -263,7 +263,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
             }
         });
     }
-
 
     @Override
     public int getItemCount() {

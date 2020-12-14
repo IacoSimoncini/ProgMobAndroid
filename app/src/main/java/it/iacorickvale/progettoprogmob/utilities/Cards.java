@@ -7,7 +7,8 @@ public class Cards {
     private String path;
     private String ref;
 
-    public Cards(String path, String ref) {
+
+    public Cards(String path, String ref ) {
         this.path = path;
         this.ref = ref;
     }

@@ -14,4 +14,18 @@
         android:fontFamily="@font/roboto"
         android:hint="@string/rename_card" />
 
+    <Spinner
+    android:id="@+id/dayCard"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginBottom="16dp"
+    android:fontFamily="@font/roboto"
+    android:background="@android:drawable/btn_dropdown"
+    android:spinnerMode="dropdown"
+    android:entries="@array/spinnerItemsDays"/>
+
+
 </LinearLayout>

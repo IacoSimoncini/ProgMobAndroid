@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import it.iacorickvale.progettoprogmob.R;
+import it.iacorickvale.progettoprogmob.adapters.CalendaryCardAdapter;
 import it.iacorickvale.progettoprogmob.adapters.CardsAdapter;
 import it.iacorickvale.progettoprogmob.firebase.CardsFunctions;
 import it.iacorickvale.progettoprogmob.firebase.DatabaseReferences;
@@ -43,7 +46,8 @@ public class FragmentCards extends Fragment  {
     private ArrayList<Cards> listCards = new ArrayList<Cards>();
     private ImageButton btnAdd;
     private Boolean aux;
-
+    private RecyclerView recyclerViewCalendary;
+    private CalendaryCardAdapter calendaryCardAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,11 +64,15 @@ public class FragmentCards extends Fragment  {
         String control = this.getArguments().getString("type");
         if(control.equals("admin")){ current_uid = this.getArguments().getString("u_id"); }
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_cards);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        RecyclerView.ItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(divider);
+
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.rv_cards);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext() , 3));
+        recyclerViewCalendary = (RecyclerView) view.findViewById(R.id.rv_days);
+        recyclerViewCalendary.setLayoutManager(new GridLayoutManager(getContext() , 6));
+        RecyclerView.ItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL);
+        recyclerViewCalendary.addItemDecoration(divider);
 
         // Fill listCards with collections path
         try {
@@ -102,6 +110,9 @@ public class FragmentCards extends Fragment  {
         cardsAdapter = new CardsAdapter(getContext(), listCards , aux);
         recyclerView.setAdapter(cardsAdapter);
 
+        calendaryCardAdapter = new CalendaryCardAdapter(getContext());
+        recyclerViewCalendary.setAdapter(calendaryCardAdapter);
+
         if(control.equals("admin")) {
 
             btnAdd = view.findViewById(R.id.button_add);
@@ -112,15 +123,20 @@ public class FragmentCards extends Fragment  {
                 public void onClick(View v) {
                     // Creation of a new card in the database
                     try {
-                        final EditText name = new EditText(getContext());
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle("Enter card name");
-                        builder.setView(name);
 
+                        builder.setTitle("Create New Card");
+                        LayoutInflater inflater = getActivity().getLayoutInflater();
+                        View dialogView = inflater.inflate(R.layout.dialog_card_mod, null);
+
+                        builder.setView(dialogView);
+
+                        final EditText name_ex = dialogView.findViewById(R.id.rename_card);
+                        final Spinner diff_ex =  (Spinner) dialogView.findViewById(R.id.dayCard);
                         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(name.getText().toString().length() > 30)
+                                if(name_ex.getText().toString().length() > 30)
                                 {
                                     Toast.makeText(getContext(), "Impossible to Create:" + "\nCard's Name must be <=18", Toast.LENGTH_SHORT).show();
                                 }
@@ -128,13 +144,12 @@ public class FragmentCards extends Fragment  {
                                 try {
                                     boolean aux = false;
                                     for(Cards c : listCards){
-                                        if(c.getPath().equals(name.getText().toString())){
+                                        if(c.getPath().equals(name_ex.getText().toString())){
                                             aux = true;
                                         }
                                     }
                                     if(!aux) {
-                                        Log.d("1)"+name.getText().toString(), "2)" +finalDocref_user);
-                                        Cards card = new Cards(name.getText().toString(), finalDocref_user);
+                                        Cards card = new Cards(name_ex.getText().toString(), finalDocref_user);
                                         CardsFunctions.createCard(card, finalDocref_user);
                                         Toast.makeText(getContext(), "Your card has been created", Toast.LENGTH_SHORT).show();
                                         listCards.add(card);

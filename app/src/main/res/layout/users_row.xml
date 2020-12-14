@@ -48,7 +48,6 @@
         android:fontFamily="@font/roboto"
         android:visibility="visible"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_path"
-        app:layout_constraintEnd_toStartOf="@id/btnCard_modify"
         app:layout_constraintStart_toEndOf="@+id/text_path" />
 
 </LinearLayout>

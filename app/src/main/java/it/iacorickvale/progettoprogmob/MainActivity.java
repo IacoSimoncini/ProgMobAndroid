@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import it.iacorickvale.progettoprogmob.fragments.FragmentAdmin;
 import it.iacorickvale.progettoprogmob.fragments.FragmentAll;
+import it.iacorickvale.progettoprogmob.fragments.FragmentCalendaryCard;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCards;
 import it.iacorickvale.progettoprogmob.fragments.FragmentUser;
 
