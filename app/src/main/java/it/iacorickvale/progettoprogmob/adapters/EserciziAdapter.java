@@ -49,8 +49,9 @@ public class EserciziAdapter extends RecyclerView.Adapter<EserciziAdapter.CViewH
     private Context context;
     String path, ref;
     boolean isAdmin;
+    private String currentDay;
 
-    public EserciziAdapter(Context ctx, ArrayList<Esercizi> struttura, String path, String ref , boolean isAdmin) {
+    public EserciziAdapter(Context ctx, ArrayList<Esercizi> struttura, String path, String ref , boolean isAdmin, String currentDay) {
         this.inflater = LayoutInflater.from(ctx);
         this.struttura =  orderListByDiff(struttura);
         this.path = path;
@@ -108,7 +109,7 @@ public class EserciziAdapter extends RecyclerView.Adapter<EserciziAdapter.CViewH
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            final CollectionReference colRef = DatabaseReferences.listExCard(ref, path);
+                            final CollectionReference colRef = DatabaseReferences.listExCard(ref, path, currentDay);
                             colRef.get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -173,6 +174,7 @@ public class EserciziAdapter extends RecyclerView.Adapter<EserciziAdapter.CViewH
     public int getItemCount() {
         return struttura.size();
     }
+
 
 
 }

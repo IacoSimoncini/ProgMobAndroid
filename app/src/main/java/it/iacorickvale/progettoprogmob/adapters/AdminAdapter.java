@@ -22,13 +22,14 @@ import java.util.ArrayList;
 
 import it.iacorickvale.progettoprogmob.MainActivity;
 import it.iacorickvale.progettoprogmob.R;
+import it.iacorickvale.progettoprogmob.fragments.FragmentCalendary;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCards;
 import it.iacorickvale.progettoprogmob.utilities.Users;
 
 public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.CViewHolder> {
     private ArrayList<Users> struttura;
     private Context context;
-    private FragmentCards fragmentCards;
+    private FragmentCalendary fragmentCalendary;
     private LayoutInflater inflater;
 
     public AdminAdapter(Context ctx, ArrayList<Users> struttura) {
@@ -145,15 +146,16 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.CViewHolder>
             @Override
             public void onClick(View v) {
                 try {
-                    fragmentCards = new FragmentCards();
+                    fragmentCalendary = new FragmentCalendary();
                     String id = struttura.get(position).getId();
                     Bundle args = new Bundle();
+                    args.putString("ABC", "A");
                     args.putString("u_id", id);
                     args.putString("type", "admin");
-                    fragmentCards.setArguments(args);
+                    fragmentCalendary.setArguments(args);
                     FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.fragment_container, fragmentCards).addToBackStack(null).commit();
+                    ft.replace(R.id.fragment_container, fragmentCalendary).addToBackStack(null).commit();
                 }catch (Exception e){
                     Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }

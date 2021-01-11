@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.protobuf.StringValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,8 +55,14 @@ public class FragmentCountdown extends Fragment {
     private boolean firstTime = true;
     private int index;
     private int lenght;
-    String exCountdown[];
-    String diffCountdown[];
+    private String currentDay;
+    private String exCountdown[];
+    private String diffCountdown[];
+    private  ProgressBar progressBar;
+    private double h=0;
+    private double k=0;
+    private double hok = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,16 +75,22 @@ public class FragmentCountdown extends Fragment {
         currentExDiff = view.findViewById(R.id.currentExDiff);
         currentExName = view.findViewById(R.id.currentExName);
         StartAndStopBtn = view.findViewById(R.id.StartAndStopBtn);
+        progressBar = view.findViewById(R.id.progress_bar);
+
         assert this.getArguments() != null;
         timeLeftInMilliseconds = this.getArguments().getLong("timeLeftInMilliseconds");
         timePauseInMilliseconds = this.getArguments().getLong("timePauseInMilliseconds");
+        k = 100000/timeLeftInMilliseconds;
+        h = 100000/timePauseInMilliseconds;
+        hok = k;
         path = this.getArguments().getString("path");
         ref = this.getArguments().getString("ref");
+        currentDay = this.getArguments().getString("currentDay");
         StartAndStopBtn.setText("START");
         timerRunning = true;
         try {
             lenght = 0;
-            listExCard(ref , path).get()
+            listExCard(ref , path,currentDay).get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -97,7 +111,7 @@ public class FragmentCountdown extends Fragment {
                     for (Esercizi e : orderListByDiff(listEserciziScheda)){
                         exCountdown[i] = e.getName();
                         diffCountdown[i] = e.getDifficulty();
-                        Log.d(diffCountdown[i], "onSuccess: ");
+                        Log.d(exCountdown[i], "onSuccess: ");
                         i+=1;
                     }
                     index = -1;
@@ -115,6 +129,8 @@ public class FragmentCountdown extends Fragment {
             public void onClick(View view){
                 if(firstTime){
                     firstTime = false;
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgress(1000);
                     index += 1;
                     currentExDiff.setText(diffCountdown[index]);
                     currentExName.setText(exCountdown[index]);
@@ -139,22 +155,26 @@ public class FragmentCountdown extends Fragment {
         countDownTimer = new CountDownTimer(timeLeftInMilliseconds , 1000){
             @Override
             public void onTick(long l){
+                int progress = (int) ((hok*l/1000)-1);
+                progressBar.setProgress(progress);
                 timeLeftInMilliseconds = l;
                 updateTimer();
-
             }
             @Override
             public void onFinish(){
+                progressBar.setProgress(0);
                 index += 1;
                 if ((index < exCountdown.length)) {
                     if(!diffCountdown[index-1].equals(diffCountdown[index]) && !inPause){
                         inPause = true;
                         currentExDiff.setText("BREAK");
                         currentExName.setText("NEXT: " + diffCountdown[index]);
+                        hok = h;
                         index -= 1;
                     }
                     else{
                         inPause = false;
+                        hok = k;
                         currentExDiff.setText(diffCountdown[index]);
                         currentExName.setText(exCountdown[index]);
                     }

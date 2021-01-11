@@ -32,22 +32,22 @@ public class DatabaseReferences {
         return FirebaseFirestore.getInstance().collection("Esercizi");
     }
 
-    public static CollectionReference listCards(String doc){
+    public static CollectionReference listCards(String doc , String Day){
         return FirebaseFirestore.getInstance().collection("users")
-                .document(doc).collection("Schede");
+                .document(doc).collection(Day);
     }
 
-    public static DocumentReference getCard(String ref, String path){
+    public static DocumentReference getCard(String ref, String path, String Day){
         return FirebaseFirestore.getInstance().collection("users")
                 .document(ref)
-                .collection("Schede")
+                .collection(Day)
                 .document(path);
     }
 
-    public static CollectionReference listExCard(String ref , String path){
+    public static CollectionReference listExCard(String ref , String path, String Day){
         return  FirebaseFirestore.getInstance().collection("users")
                 .document(ref)
-                .collection("Schede")
+                .collection(Day)
                 .document(path)
                 .collection("ExSchede");
     }

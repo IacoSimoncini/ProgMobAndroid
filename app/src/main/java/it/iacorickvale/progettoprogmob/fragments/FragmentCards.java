@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -33,7 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import it.iacorickvale.progettoprogmob.R;
-import it.iacorickvale.progettoprogmob.adapters.CalendaryCardAdapter;
 import it.iacorickvale.progettoprogmob.adapters.CardsAdapter;
 import it.iacorickvale.progettoprogmob.firebase.CardsFunctions;
 import it.iacorickvale.progettoprogmob.firebase.DatabaseReferences;
@@ -44,10 +44,15 @@ public class FragmentCards extends Fragment  {
     private RecyclerView recyclerView;
     private CardsAdapter cardsAdapter;
     private ArrayList<Cards> listCards = new ArrayList<Cards>();
+    private ArrayList<String> days = new ArrayList<String>();
+    private Integer ndays = 0;
     private ImageButton btnAdd;
     private Boolean aux;
     private RecyclerView recyclerViewCalendary;
-    private CalendaryCardAdapter calendaryCardAdapter;
+    private String currentDay;
+    private String current_uid;
+    private Boolean whichSet;
+    private String ABC;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,132 +62,103 @@ public class FragmentCards extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_cards, container, false);
-
         String docref_user = null;
-        String current_uid = null;
         assert this.getArguments() != null;
+        ABC =  this.getArguments().getString("ABC");
         String control = this.getArguments().getString("type");
         if(control.equals("admin")){ current_uid = this.getArguments().getString("u_id"); }
+        if(!this.getArguments().getString("SelectedDay").equals("all")){
+            currentDay = this.getArguments().getString("SelectedDay");
+            whichSet = true;
+        }else{
+            whichSet = false;
+        }
+        recyclerView = view.findViewById(R.id.rv_cards);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView.ItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(divider);
 
-
-
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_cards);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext() , 3));
-        recyclerViewCalendary = (RecyclerView) view.findViewById(R.id.rv_days);
-        recyclerViewCalendary.setLayoutManager(new GridLayoutManager(getContext() , 6));
-        RecyclerView.ItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL);
-        recyclerViewCalendary.addItemDecoration(divider);
-
+        days = fillDays(days, ndays);
         // Fill listCards with collections path
         try {
-            if(control.equals("admin")) {
-                docref_user = new String ( current_uid);
+            if (control.equals("admin")) {
+                docref_user = new String(this.getArguments().getString("u_id"));
                 aux = true;
-            }else{
-                final FirebaseUser user = DatabaseReferences.getUser();
-                docref_user = new String(user.getUid());
+            } else {
+                docref_user = new String(DatabaseReferences.getUser().getUid());
                 aux = false;
             }
             final String doc = docref_user;
-            DatabaseReferences.listCards(doc)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Cards card = new Cards(document.getId(), doc);;
-                                    listCards.add(card);
-                                }
-                            }
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    cardsAdapter.notifyDataSetChanged();
-                }
-            });
-        }catch(Exception e){
-            Toast.makeText(getContext(), "Cards need Name", Toast.LENGTH_SHORT).show();
-        }
-
-        cardsAdapter = new CardsAdapter(getContext(), listCards , aux);
-        recyclerView.setAdapter(cardsAdapter);
-
-        calendaryCardAdapter = new CalendaryCardAdapter(getContext());
-        recyclerViewCalendary.setAdapter(calendaryCardAdapter);
-
-        if(control.equals("admin")) {
-
-            btnAdd = view.findViewById(R.id.button_add);
-            btnAdd.setVisibility(View.VISIBLE);
-            final String finalDocref_user = docref_user;
-            btnAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Creation of a new card in the database
-                    try {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-                        builder.setTitle("Create New Card");
-                        LayoutInflater inflater = getActivity().getLayoutInflater();
-                        View dialogView = inflater.inflate(R.layout.dialog_card_mod, null);
-
-                        builder.setView(dialogView);
-
-                        final EditText name_ex = dialogView.findViewById(R.id.rename_card);
-                        final Spinner diff_ex =  (Spinner) dialogView.findViewById(R.id.dayCard);
-                        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            Log.d("NON ADMIN" , doc);
+            if(whichSet){
+                DatabaseReferences.listCards(doc, currentDay)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(name_ex.getText().toString().length() > 30)
-                                {
-                                    Toast.makeText(getContext(), "Impossible to Create:" + "\nCard's Name must be <=18", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                try {
-                                    boolean aux = false;
-                                    for(Cards c : listCards){
-                                        if(c.getPath().equals(name_ex.getText().toString())){
-                                            aux = true;
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        if(ABC == null) {
+                                            Cards card = new Cards(document.getId(), doc, document.get("type").toString());
+                                            listCards.add(card);
+                                        }else{
+                                            if (ABC.equals(document.get("type").toString())){
+                                                Log.d("IN QUESTO CAZZO DI CASO", document.get("type").toString());
+                                                Cards card = new Cards(document.getId(), doc, document.get("type").toString());
+                                                listCards.add(card);
+                                            };
                                         }
                                     }
-                                    if(!aux) {
-                                        Cards card = new Cards(name_ex.getText().toString(), finalDocref_user);
-                                        CardsFunctions.createCard(card, finalDocref_user);
-                                        Toast.makeText(getContext(), "Your card has been created", Toast.LENGTH_SHORT).show();
-                                        listCards.add(card);
-                                        cardsAdapter.notifyDataSetChanged();
-                                    }else { Toast.makeText(getContext(), "This card already exists", Toast.LENGTH_SHORT).show();}
-                                } catch (Exception e) {
-                                    Toast.makeText(getContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
                                 }
                             }
-                        });
-                        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Close dialog
-                            }
-                        });
-
-                        builder.create().show();
-
-                    } catch (Exception e) {
-                        Toast.makeText(getContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        cardsAdapter.notifyDataSetChanged();
                     }
-                    cardsAdapter.notifyDataSetChanged();
+                });
+            }else{
+                for (String d : days){
+                    DatabaseReferences.listCards(doc, d)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Cards card = new Cards(document.getId(), doc, document.get("type").toString());
+                                            listCards.add(card);
+                                        }
+                                    }
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            cardsAdapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            });
-        } else {
-            btnAdd = view.findViewById(R.id.button_add);
-            btnAdd.setVisibility(View.GONE);
-        }
+            }
+        } catch (Exception e) {
+
+    }
+
+        cardsAdapter = new CardsAdapter(getContext(), listCards, aux, currentDay);
+        recyclerView.setAdapter(cardsAdapter);
 
         listCards.clear();
         return view;
     }
 
+    public ArrayList<String> fillDays(ArrayList<String> day , Integer nday){
+        nday = 0;
+        day.clear();
+        while(nday < 28){
+            nday += 1;
+            day.add(nday.toString());
+        }
+        return day;
+    }
+
 }
+

@@ -33,6 +33,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 public class Register extends AppCompatActivity {
     EditText mfirstname, mlastname, mEmail, mPassword, mPhone;
     Button mRegisterBtn;
@@ -41,6 +43,7 @@ public class Register extends AppCompatActivity {
     StorageReference storageReference;
     Window window;
     private ActionBar actionBar;
+
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {

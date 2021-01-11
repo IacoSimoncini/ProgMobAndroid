@@ -50,16 +50,18 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
     private Context context;
     private FragmentEsercizi fragmentEsercizi;
     private FragmentCountdown fragmentCountdown;
-    private ArrayList<Cards> struttura;
+    private ArrayList<Cards> struttura ;
     private LayoutInflater inflater;
     private Boolean control_ifAd;
     private long timeLeftInMilliseconds = 0;
     private long timePauseInMilliseconds = 0;
+    private String currentDay;
 
-    public CardsAdapter(Context ctx, ArrayList<Cards> struttura , Boolean aux) {
+    public CardsAdapter(Context ctx, ArrayList<Cards> struttura , Boolean aux, String currentDay) {
         this.inflater = LayoutInflater.from(ctx);
         this.struttura = struttura;
         this.control_ifAd = aux;
+        this.currentDay = currentDay;
         this.context = inflater.getContext();
     }
     public class CViewHolder extends RecyclerView.ViewHolder{
@@ -67,7 +69,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
             LinearLayout parentLayout;
             Button btnDel;
             Button btnMod;
-            ImageButton btnPlay;
+            Button btnPlay;
 
         public CViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,12 +105,12 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     String newName = name.getText().toString();
-                                    CardsFunctions.modifyCard(struttura.get(position).getRef() , struttura.get(position).getPath(), newName);
+                                    //String type =
+                                    //CardsFunctions.modifyCard(struttura.get(position).getRef() , struttura.get(position).getPath(), newName, , currentDay);
                                     Log.d("onClick: " , struttura.get(position).getRef() +"     " + struttura.get(position).getPath() );
-                                    struttura.set(position , new Cards(name.getText().toString(), getUser().getUid()));
+                                    //struttura.set(position , new Cards(name.getText().toString(), getUser().getUid()));
                                     notifyItemChanged(position , name.getText().toString());
                                     notifyDataSetChanged();
-
                                 }
                             });
                     alertDialog.setNegativeButton("delete",
@@ -130,12 +132,11 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                     alertDialog.setTitle("Delete the Card?");
                     View dialogView = inflater.inflate(R.layout.delete_ex, null);
                     alertDialog.setView(dialogView);
-
                     alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                     //holder.btnDel.
-                    CardsFunctions.deleteCard(struttura.get(position).getRef() , struttura.get(position).getPath());
+                    CardsFunctions.deleteCard(struttura.get(position).getRef() , struttura.get(position).getPath(), currentDay);
                     struttura.remove(holder.getAdapterPosition());
                     notifyItemRemoved(holder.getAdapterPosition());
                     notifyDataSetChanged();
@@ -153,90 +154,88 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
 
             });
 
-
+            holder.btnPlay.setVisibility(View.INVISIBLE);
         } else {
             Log.d("è dunque " , "NON Admin");
             holder.btnDel.setVisibility(View.INVISIBLE);
             holder.btnMod.setVisibility(View.INVISIBLE);
+            holder.btnPlay.setVisibility(View.VISIBLE);
             holder.btnPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(struttura.size() > 0){
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                        View dialogView = inflater.inflate(R.layout.difficulty_card, null);
-                        builder.setTitle("CHOOSE DIFFICULTY");
-                        builder.setView(dialogView);
-                        final Button bEasy = dialogView.findViewById(R.id.easy_btn);
-                        final Button bMedium = dialogView.findViewById(R.id.medium_btn);
-                        final Button bHard = dialogView.findViewById(R.id.hard_btn);
-                        Button bStart = dialogView.findViewById(R.id.hard_btn);
-                        Button bGoto = dialogView.findViewById(R.id.goto_btn);
-                        bEasy.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                timeLeftInMilliseconds = 150000;
-                                timePauseInMilliseconds = 600000;
-                                bEasy.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
-                                bHard.setBackgroundColor(v.getResources().getColor(android.R.color.white));
-                                bMedium.setBackgroundColor(v.getResources().getColor(android.R.color.white));
-                            }
-                        });
-                        bMedium.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                timeLeftInMilliseconds = 300000;
-                                timePauseInMilliseconds = 300000;
-                                bEasy.setBackgroundColor(v.getResources().getColor(android.R.color.white));
-                                bMedium.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
-                                bHard.setBackgroundColor(v.getResources().getColor(android.R.color.white));
-                            }
-                        });
-                        bHard.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                timeLeftInMilliseconds = 600000;
-                                timePauseInMilliseconds = 100000;
-                                bEasy.setBackgroundColor(v.getResources().getColor(android.R.color.white));
-                                bMedium.setBackgroundColor(v.getResources().getColor(android.R.color.white));
-                                bHard.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
-                            }
-                        });
-                        bGoto.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (timePauseInMilliseconds!=0 && timeLeftInMilliseconds!=0){
-                                    try {
-                                        fragmentCountdown = new FragmentCountdown();
-                                        String path_scheda = struttura.get(position).getPath();
-                                        String ref= struttura.get(position).getRef();
-                                        Bundle args = new Bundle();
-                                        args.putLong("timeLeftInMilliseconds",  timeLeftInMilliseconds);
-                                        args.putLong("timePauseInMilliseconds", timePauseInMilliseconds);
-                                        args.putString("path", path_scheda);
-                                        args.putString("ref", ref);
-                                        fragmentCountdown.setArguments(args);
-                                        FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
-                                        FragmentTransaction ft = fm.beginTransaction();
-                                        ft.replace(R.id.fragment_container, fragmentCountdown);
-                                        ft.commit();
-                                    }catch (Exception e){
-                                        Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        });
-                        builder.show();
-
+                               if(struttura.size() > 0){
+                final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                View dialogView = inflater.inflate(R.layout.difficulty_card, null);
+                builder.setTitle("CHOOSE DIFFICULTY");
+                builder.setView(dialogView);
+                final Button bEasy = dialogView.findViewById(R.id.easy_btn);
+                final Button bMedium = dialogView.findViewById(R.id.medium_btn);
+                final Button bHard = dialogView.findViewById(R.id.hard_btn);
+                Button bStart = dialogView.findViewById(R.id.hard_btn);
+                Button bGoto = dialogView.findViewById(R.id.goto_btn);
+                bEasy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeLeftInMilliseconds = 15000;
+                        timePauseInMilliseconds = 60000;
+                        bEasy.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                        bHard.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                        bMedium.setBackgroundColor(v.getResources().getColor(android.R.color.white));
                     }
-                }
-            });
+                });
+                bMedium.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeLeftInMilliseconds = 30000;
+                        timePauseInMilliseconds = 30000;
+                        bEasy.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                        bMedium.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                        bHard.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                    }
+                });
+                bHard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeLeftInMilliseconds = 60000;
+                        timePauseInMilliseconds = 15000;
+                        bEasy.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                        bMedium.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                        bHard.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                    }
+                });
+                bGoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (timePauseInMilliseconds!=0 && timeLeftInMilliseconds!=0){
+                            try {
+                                fragmentCountdown = new FragmentCountdown();
+                                String path_scheda = struttura.get(position).getPath();
+                                String ref= struttura.get(position).getRef();
+                                Bundle args = new Bundle();
+                                args.putLong("timeLeftInMilliseconds",  timeLeftInMilliseconds);
+                                args.putLong("timePauseInMilliseconds", timePauseInMilliseconds);
+                                args.putString("path", path_scheda);
+                                args.putString("ref", ref);
+                                args.putString("currentDay", currentDay);
+                                fragmentCountdown.setArguments(args);
+                                FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+                                FragmentTransaction ft = fm.beginTransaction();
+                                ft.replace(R.id.fragment_container, fragmentCountdown);
+                                ft.commit();
+                            }catch (Exception e){
+                                Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+                builder.show();
+
+            }
+        }
+    });
 
 
         }
-
-
-
-
         holder.textPath.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -253,6 +252,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                     }else {
                         args.putString("type", "noadmin");
                     }
+                    args.putString("currentDay", currentDay);
                     fragmentEsercizi.setArguments(args);
                     FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
@@ -267,5 +267,12 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
     @Override
     public int getItemCount() {
         return struttura.size();
+    }
+
+    public void modifyCurrentDay(String newDay){
+        currentDay = new String(newDay);
+        notify();
+        notifyDataSetChanged();
+        notifyAll();
     }
 }

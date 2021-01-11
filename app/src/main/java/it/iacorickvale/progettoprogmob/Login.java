@@ -30,9 +30,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static it.iacorickvale.progettoprogmob.firebase.DatabaseReferences.getUsers;
 
 public class Login extends AppCompatActivity {
 
@@ -83,6 +86,7 @@ public class Login extends AppCompatActivity {
                     mPassword.setError("Password must be >= 6 characters");
                     return;
                 }
+
 
 
                 //Authenticate the user

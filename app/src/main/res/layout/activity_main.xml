@@ -12,9 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_nav"
-        android:background="@drawable/gradient_background">
-
-    </FrameLayout>
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/gradient_background"></FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

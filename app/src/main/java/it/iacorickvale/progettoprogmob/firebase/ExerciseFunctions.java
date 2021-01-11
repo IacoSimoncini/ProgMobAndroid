@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +44,10 @@ public class ExerciseFunctions {
         Log.d("1)" ,"esercizio eliminato");
     }
 
-    public static void addExToCard(String ref, String path , Esercizi ex){
+    public static void addExToCard(String ref, String path , Esercizi ex, String day){
         DatabaseReferences.getUsers()
                 .document(ref)
-                .collection("Schede")
+                .collection(day)
                 .document(path)
                 .collection("ExSchede")
                 .document(ex.getName())
@@ -58,47 +59,49 @@ public class ExerciseFunctions {
         DatabaseReferences.getExercises().document(Name).set(e);
     }
 
-    public static void deleteExCard(String ref, String path, String name){
-        DatabaseReferences.listExCard(ref, path).document(name).delete();
+    public static void deleteExCard(String ref, String path, String name, String day){
+        DatabaseReferences.listExCard(ref, path, day).document(name).delete();
     }
 
     public static void updateExCard(final String ID, final String name , final String desc , final String diff ){
-        Log.d("entro nel metodo", " updateExCard");
+        final ArrayList<String>days = new ArrayList<String>(Arrays.asList("MON", "TUE" ,"WED" , "THU" , "FRI" , "SAT"));
         DatabaseReferences.getUsers().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
-                        final String UserID = new String(documentSnapshots.getId());
-                        Log.d("controllo l'utente", UserID);
-                        DatabaseReferences.listCards(UserID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task ) {
-                                if (task.isSuccessful()) {
-                                    for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
-                                        final String CardID = new String(documentSnapshots.getId());
-                                        Log.d("controllo la scheda", CardID);
-                                        DatabaseReferences.listExCard(UserID , CardID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if(task.isSuccessful()){
-                                                    for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
-                                                        Log.d("controllo l'esercizio'",documentSnapshots.getId());
-                                                        if (documentSnapshots.getId().equals(ID)){
-                                                            Log.d("esercizio da aggiornare", documentSnapshots.getId());
-                                                            deleteExCard(UserID , CardID , documentSnapshots.getId().toString());
-                                                            addExToCard(UserID , CardID , new Esercizi(desc, diff , name));
+                    for(final String day : days){
+                        for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
+                            final String UserID = new String(documentSnapshots.getId());
+                            Log.d("controllo l'utente", UserID);
+                            DatabaseReferences.listCards(UserID, day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task ) {
+                                    if (task.isSuccessful()) {
+                                        for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
+                                            final String CardID = new String(documentSnapshots.getId());
+                                            Log.d("controllo la scheda", CardID);
+                                            DatabaseReferences.listExCard(UserID , CardID, day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if(task.isSuccessful()){
+                                                        for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
+                                                            Log.d("controllo l'esercizio'",documentSnapshots.getId());
+                                                            if (documentSnapshots.getId().equals(ID)){
+                                                                Log.d("esercizio da aggiornare", documentSnapshots.getId());
+                                                                deleteExCard(UserID , CardID , documentSnapshots.getId().toString(), day);
+                                                                addExToCard(UserID , CardID , new Esercizi(desc, diff , name), day);
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            }
-                                        });
+                                            });
 
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
 
+                        }
                     }
                 }
             }

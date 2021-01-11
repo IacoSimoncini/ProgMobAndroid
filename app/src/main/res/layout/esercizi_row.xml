@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="75dp"
@@ -10,47 +11,55 @@
     android:layout_marginLeft="2dp"
     android:padding="8dp">
 
-
-    <ImageView
-        android:id="@+id/text_difficoltà"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="10dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="383dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
-        android:background="@color/white"
-        app:srcCompat="@drawable/ic_account" />
-
-    <TextView
-        android:id="@+id/text_nome"
-        android:layout_width="255dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:baselineAligned="true"
-        android:fontFamily="@font/roboto"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="italic"
-        app:layout_constraintBaseline_toBaselineOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnEx_delete"
-        app:layout_constraintStart_toEndOf="@id/text_difficoltà" />
-
-    <Button
-        android:id="@+id/btnEx_delete"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="3dp"
-        android:background="@drawable/background_button_de_mo"
-        android:elevation="3dp"
-        android:fontFamily="@font/annie_use_your_telescope"
-        android:foreground="@android:drawable/ic_menu_delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_name" />
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp">
 
 
+        <ImageView
+            android:id="@+id/text_difficoltà"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_account"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.047"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.514" />
+
+        <TextView
+            android:id="@+id/text_nome"
+            android:layout_width="195dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/roboto"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.479" />
+
+        <Button
+            android:id="@+id/btnEx_delete"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@android:drawable/ic_menu_delete"
+            android:fontFamily="@font/roboto"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.924"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

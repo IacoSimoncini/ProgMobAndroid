@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import it.iacorickvale.progettoprogmob.fragments.FragmentAdmin;
 import it.iacorickvale.progettoprogmob.fragments.FragmentAll;
-import it.iacorickvale.progettoprogmob.fragments.FragmentCalendaryCard;
+import it.iacorickvale.progettoprogmob.fragments.FragmentCalendary;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCards;
 import it.iacorickvale.progettoprogmob.fragments.FragmentUser;
 
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentCards fragmentCards;
     private FragmentAdmin fragmentAdmin;
     private FragmentAll fragmentAll;
+    private FragmentCalendary fragmentCalendary;
     private BottomNavigationView bottomNav;
     private Context context;
     private FirebaseAuth fAuth;
@@ -66,10 +67,13 @@ public class MainActivity extends AppCompatActivity {
         fragmentUser = new FragmentUser();
         fragmentAdmin = new FragmentAdmin();
         fragmentAll = new FragmentAll();
+        fragmentCalendary = new FragmentCalendary();
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
+
+
 
         DocumentReference docRef = fStore.collection("users").document(fAuth.getCurrentUser().getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -78,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 if(task.isComplete()){
                     String user_type = String.valueOf(task.getResult().get("admin"));
                     if((user_type.equals("admin"))){
-                        Log.d("fragmentAdmin", "entrato");
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentAdmin).commit();
                         bottomNav = findViewById(R.id.bottom_nav);
                         bottomNav.inflateMenu(R.menu.bottom_menu_admin);
@@ -103,9 +106,10 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Bundle args = new Bundle();
                         args.putString("type", "noadmin");
-                        fragmentCards.setArguments(args);
-                        Log.d("FragmentCard", "entrato");
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentCards).commit();
+                        args.putString("ABC", "A");
+                        args.putString("SelectedDay", "all");
+                        fragmentCalendary.setArguments(args);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentCalendary).commit();
                         bottomNav = findViewById(R.id.bottom_nav);
                         bottomNav.inflateMenu(R.menu.bottom_menu);
                         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -116,11 +120,19 @@ public class MainActivity extends AppCompatActivity {
                                     case R.id.menu_cards:
                                         selectedFragment = fragmentCards;
                                         break;
+                                    case R.id.menu_calendary:
+                                        selectedFragment = fragmentCalendary;
+                                        break;
                                     case R.id.menu_user:
                                         selectedFragment = fragmentUser;
                                         break;
                                 }
                                 if(selectedFragment != null) {
+                                    Bundle args = new Bundle();
+                                    args.putString("type", "noadmin");
+                                    args.putString("ABC", "A");
+                                    args.putString("SelectedDay", "all");
+                                    selectedFragment.setArguments(args);
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                                 }
                                 return true;

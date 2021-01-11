@@ -54,11 +54,14 @@ public class FragmentEsercizi extends Fragment {
     private ArrayList<Esercizi> listEserciziAdd = new ArrayList<>();
     private ImageButton btnAdd;
     private String[] allEsercizi;
-    List<String> exList;
+    private List<String> exList;
     private boolean isAdmin;
     private String admin;
-
+    private String currentDay;
+    private Boolean whichSet;
     private int index = 0;
+    private ArrayList<String> days = new ArrayList<String>();
+    private Integer ndays = 0;
     boolean[] checkedItemsArray;
 
     Button btnDel;
@@ -83,46 +86,78 @@ public class FragmentEsercizi extends Fragment {
         path = this.getArguments().getString("path");
         ref = this.getArguments().getString("ref");
         admin = this.getArguments().getString("type");
-
         btnAdd = view.findViewById(R.id.button_add);
+        whichSet = (this.getArguments().getString("currentDay") != null);
+        isAdmin = admin.equals("admin");
 
-        if(admin.equals("admin")){
-            isAdmin=true;
+        if(isAdmin){
             btnAdd.setVisibility(View.VISIBLE);
         } else {
-            isAdmin=false;
             btnAdd.setVisibility(View.INVISIBLE);
         }
 
-        try {
-            listExCard( ref , path).get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for(final QueryDocumentSnapshot document : task.getResult()){
-                                    Map mp = new HashMap();
-                                    mp = document.getData();
-                                    Esercizi ex = new Esercizi(mp.get("description").toString(),
-                                            mp.get("difficulty").toString(),
-                                            mp.get("name").toString());
-                                    listEserciziScheda.add(ex);
-                                    EserciziAdapter.notifyDataSetChanged();
+        if(whichSet) {
+            currentDay= this.getArguments().getString("currentDay");
+            try {
+                listExCard(ref, path, currentDay).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (final QueryDocumentSnapshot document : task.getResult()) {
+                                        Map mp = new HashMap();
+                                        mp = document.getData();
+                                        Esercizi ex = new Esercizi(mp.get("description").toString(),
+                                                mp.get("difficulty").toString(),
+                                                mp.get("name").toString());
+                                        listEserciziScheda.add(ex);
+                                        EserciziAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             }
+                        }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        EserciziAdapter.notifyDataSetChanged();
+                    }
+                });
+
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            days = fillDays(days, ndays);
+            for(String s : days) {
+                try {
+                    listExCard(ref, path, currentDay).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (final QueryDocumentSnapshot document : task.getResult()) {
+                                            Map mp = new HashMap();
+                                            mp = document.getData();
+                                            Esercizi ex = new Esercizi(mp.get("description").toString(),
+                                                    mp.get("difficulty").toString(),
+                                                    mp.get("name").toString());
+                                            listEserciziScheda.add(ex);
+                                            EserciziAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            EserciziAdapter.notifyDataSetChanged();
                         }
-                    }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    EserciziAdapter.notifyDataSetChanged();
+                    });
+
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            });
-
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
-
-        EserciziAdapter = new EserciziAdapter(getContext(), listEserciziScheda, path, ref, isAdmin);
+        EserciziAdapter = new EserciziAdapter(getContext(), listEserciziScheda, path, ref, isAdmin, currentDay);
         recyclerView.setAdapter(EserciziAdapter);
 
         try {
@@ -209,7 +244,7 @@ public class FragmentEsercizi extends Fragment {
                                             }
                                             if(!aux){
                                                 try {
-                                                    ExerciseFunctions.addExToCard(ref, path, ex);
+                                                    ExerciseFunctions.addExToCard(ref, path, ex, currentDay );
                                                     listEserciziScheda.add(ex);
                                                     EserciziAdapter.notifyDataSetChanged();
                                                 } catch (Exception e) {
@@ -238,6 +273,17 @@ public class FragmentEsercizi extends Fragment {
 
         listEserciziAdd.clear();
         return view;
+    }
+
+    public ArrayList<String> fillDays(ArrayList<String> day , Integer nday){
+        nday = 0;
+        day.clear();
+        while(nday < 28){
+            nday += 1;
+            day.add(nday.toString());
+
+        }
+        return day;
     }
 
 
