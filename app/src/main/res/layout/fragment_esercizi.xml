@@ -8,19 +8,19 @@
         android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:fontFamily="@font/bangers"
+        android:fontFamily="@font/roboto"
         android:paddingLeft="10dp"
         android:text="@string/exercise_list"
         android:textColor="#000000"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_esercizi"
         android:layout_width="match_parent"
         android:layout_height="589dp"
         android:layout_marginTop="40dp"
-
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,6 +31,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="21dp"
+        android:backgroundTint="@color/yellow"
         android:clickable="true"
         app:backgroundTint="@android:color/white"
         app:srcCompat="@drawable/ic_plus" />

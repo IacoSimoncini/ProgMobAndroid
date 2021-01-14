@@ -32,6 +32,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Console;
 import java.util.ArrayList;
 
 import it.iacorickvale.progettoprogmob.MainActivity;
@@ -104,15 +105,27 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                     alertDialog.setPositiveButton("confirm",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    String newName = name.getText().toString();
-                                    //String type =
-                                    //CardsFunctions.modifyCard(struttura.get(position).getRef() , struttura.get(position).getPath(), newName, , currentDay);
-                                    Log.d("onClick: " , struttura.get(position).getRef() +"     " + struttura.get(position).getPath() );
-                                    //struttura.set(position , new Cards(name.getText().toString(), getUser().getUid()));
-                                    notifyItemChanged(position , name.getText().toString());
-                                    notifyDataSetChanged();
+                                    if( name.getText().toString().equals("")){
+                                        Toast.makeText(context, "Impossible to Update:" + "\nInsert new name", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else if( name.getText().toString().length() > 20)
+                                    {
+                                        Toast.makeText(context, "Impossible to Update:" + "\nName must be <20", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        String newName = name.getText().toString();
+                                        String type = struttura.get(position).getType();
+                                        String ref = struttura.get(position).getRef();
+
+                                        CardsFunctions.modifyCard(ref, struttura.get(position).getPath(), newName, type, currentDay);
+
+                                        struttura.set(position, new Cards(newName, ref, type));
+                                        notifyItemChanged(position, new Cards(newName, ref, type));
+                                        notifyDataSetChanged();
+                                    }
                                 }
-                            });
+                            }
+                            );
                     alertDialog.setNegativeButton("delete",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -120,7 +133,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                                 }
                             });
                     alertDialog.show();
-                    //notifyItemChanged(position , name);
                     notifyDataSetChanged();
                 }
             });

@@ -13,10 +13,11 @@
     <string name="creaScheda">Create Card</string>
     <string name="eliminaScheda">Delete Cards</string>
     <string name="register">Register</string>
-    <string name="already_registered_log_in">Already registered? Login</string>
+    <string name="menu_info">Info</string>
+    <string name="already_registered_log_in">Login</string>
     <string name="logout">Logout</string>
     <string name="login">LOGIN WITH YOUR DATA</string>
-    <string name="new_here_create_account">New here? Create Account</string>
+    <string name="new_here_create_account">Create Account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="user">User</string>
     <string name="menu_cards">Cards</string>

@@ -5,26 +5,56 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:text="FULL WORKOUT IN 4 WEEK"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:text="L      M      M      G      V      S      D"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toTopOf="@+id/rv_calendary"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="14dp" />
+
         <Button
             android:id="@+id/changeABC"
-            android:layout_width="340dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="36dp"
-            android:fontFamily="@font/bangers"
-            android:paddingLeft="10dp"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
             android:text="CHANGE WORKOUT TYPE"
             android:textColor="#000000"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:textSize="18dp"
+            android:padding="20dp"
+            android:textStyle="italic"
+            android:backgroundTint="@color/yellow"
+            android:background="@drawable/shape"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_calendary"
-            app:layout_constraintVertical_bias="0.073" />
+            app:layout_constraintVertical_bias="0.265" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_calendary"
@@ -32,13 +62,13 @@
             android:layout_height="324dp"
             android:layout_below="@+id/changeABC"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
             android:fontFamily="@font/roboto"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.245"></androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintVertical_bias="0.41"></androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

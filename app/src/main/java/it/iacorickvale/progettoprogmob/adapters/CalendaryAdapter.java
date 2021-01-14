@@ -122,7 +122,10 @@ public class CalendaryAdapter extends RecyclerView.Adapter<CalendaryAdapter.CVie
                                         else{
                                             try {
                                                 CardsFunctions.createCard(name_card.getText().toString(), type , uid, new Integer(position+1).toString());
+                                                ifset[position] = true;
+                                                notifyItemChanged(position,true);
                                                 notifyItemChanged(position);
+                                                notifyDataSetChanged();
                                                 Toast.makeText(context, "Your card has been created", Toast.LENGTH_SHORT).show();
                                             } catch (Exception e) {
                                                 Toast.makeText(context , "path " + name_card.getText().toString() + " type " + type + " uid" + uid + e.getMessage(), Toast.LENGTH_SHORT).show();

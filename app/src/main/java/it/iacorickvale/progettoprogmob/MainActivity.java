@@ -30,12 +30,14 @@ import it.iacorickvale.progettoprogmob.fragments.FragmentAdmin;
 import it.iacorickvale.progettoprogmob.fragments.FragmentAll;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCalendary;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCards;
+import it.iacorickvale.progettoprogmob.fragments.FragmentInfo;
 import it.iacorickvale.progettoprogmob.fragments.FragmentUser;
 
 public class MainActivity extends AppCompatActivity {
     Window window;
     private ActionBar actionBar;
 
+    private FragmentInfo fragmentInfo;
     private FragmentUser fragmentUser;
     private FragmentCards fragmentCards;
     private FragmentAdmin fragmentAdmin;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentCards = new FragmentCards();
         fragmentUser = new FragmentUser();
+        fragmentInfo = new FragmentInfo();
         fragmentAdmin = new FragmentAdmin();
         fragmentAll = new FragmentAll();
         fragmentCalendary = new FragmentCalendary();
@@ -123,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                                     case R.id.menu_user:
                                         selectedFragment = fragmentUser;
                                         break;
+                                    case R.id.menu_info:
+                                        selectedFragment = fragmentInfo;
                                 }
                                 if(selectedFragment != null) {
                                     Bundle args = new Bundle();
