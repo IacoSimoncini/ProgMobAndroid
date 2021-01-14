@@ -117,9 +117,6 @@ public class MainActivity extends AppCompatActivity {
                             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                                 Fragment selectedFragment = null;
                                 switch(item.getItemId()) {
-                                    case R.id.menu_cards:
-                                        selectedFragment = fragmentCards;
-                                        break;
                                     case R.id.menu_calendary:
                                         selectedFragment = fragmentCalendary;
                                         break;
@@ -131,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
                                     Bundle args = new Bundle();
                                     args.putString("type", "noadmin");
                                     args.putString("ABC", "A");
-                                    args.putString("SelectedDay", "all");
                                     selectedFragment.setArguments(args);
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                                 }

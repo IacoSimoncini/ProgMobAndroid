@@ -124,21 +124,26 @@ public class FragmentCountdown extends Fragment {
         }catch (Exception e){
             Toast.makeText(getContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        StartAndStopBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                if(firstTime){
-                    firstTime = false;
-                    progressBar.setVisibility(View.VISIBLE);
-                    progressBar.setProgress(1000);
-                    index += 1;
-                    currentExDiff.setText(diffCountdown[index]);
-                    currentExName.setText(exCountdown[index]);
+        if (listEserciziScheda.isEmpty()){
+            currentExName.setText("NO EXERCISE");
+            StartAndStopBtn.setVisibility(View.INVISIBLE);
+        }else {
+            StartAndStopBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (firstTime) {
+                        firstTime = false;
+                        progressBar.setVisibility(View.VISIBLE);
+                        progressBar.setProgress(1000);
+                        index += 1;
+                        currentExDiff.setText(diffCountdown[index]);
+                        currentExName.setText(exCountdown[index]);
+                    }
+                    timerRunning = !timerRunning;
+                    startStop();
                 }
-                timerRunning = !timerRunning;
-                startStop();
-            }
-        });
+            });
+        }
         return view;
     }
 

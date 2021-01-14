@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:padding="8dp"
     android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp">
@@ -19,89 +19,77 @@
 
         <ImageView
             android:id="@+id/imageCard"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:background="@drawable/ic_copy"
             android:padding="2dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.666" />
+            app:layout_constraintVertical_bias="0.233" />
+
 
         <TextView
             android:id="@+id/text_path"
-            android:layout_width="170dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="2dp"
+            android:layout_width="250dp"
+            android:layout_height="80dp"
             android:fontFamily="@font/roboto"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="25sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.336"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.444" />
+            app:layout_constraintTop_toBottomOf="@+id/imageCard"
+            app:layout_constraintVertical_bias="0.096" />
 
         <Button
             android:id="@+id/btnCard_modify"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@android:drawable/ic_menu_edit"
             android:fontFamily="@font/roboto"
+            android:gravity="center_horizontal"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.954"
+            app:layout_constraintHorizontal_bias="0.69"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.509" />
-
-        <Button
-            android:id="@+id/btnCard_preferred"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background=""
-            android:fontFamily="@font/roboto"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.954"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.509" />
+            app:layout_constraintVertical_bias="0.62" />
 
         <Button
             android:id="@+id/btnCard_delete"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@android:drawable/ic_menu_delete"
             android:fontFamily="@font/roboto"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.801"
+            app:layout_constraintHorizontal_bias="0.319"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.509" />
+            app:layout_constraintVertical_bias="0.62" />
 
         <Button
             android:id="@+id/playCard"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@android:drawable/ic_media_play"
             android:fontFamily="@font/roboto"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.954"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.62" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

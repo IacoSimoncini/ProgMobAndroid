@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -77,9 +78,10 @@ public class FragmentCalendary extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("ATTUALE CICLO ",String.valueOf(d+1));
+                                Log.d("ATTUALE CICLO " + String.valueOf(d+1) , " document: " + document.getData());
                                 if(document.get("type").toString().equals(type)) {
                                     ifset[d] = true;
+                                    break;
                                 }else{
                                     ifset[d] = false;
                                 }
@@ -107,6 +109,10 @@ public class FragmentCalendary extends Fragment {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 View dialogView = inflater.inflate(R.layout.switch_type, null);
                 builder.setTitle("CHOOSE TYPE");
+                final Bundle args = new Bundle();
+                args.putString("type", controlIfAd);
+                args.putString("u_id", uid);
+                args.putString("ABC" , type);
                 final FragmentCalendary fragmentCalendary = new FragmentCalendary();
                 final Button A = dialogView.findViewById(R.id.A);
                 final Button B = dialogView.findViewById(R.id.B);
@@ -115,19 +121,10 @@ public class FragmentCalendary extends Fragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                try {
-                                    Bundle args = new Bundle();
-                                    args.putString("type", controlIfAd);
-                                    args.putString("u_id", uid);
-                                    args.putString("ABC", "A");
-                                    fragmentCalendary.setArguments(args);
-                                    FragmentManager fm = (getActivity()).getSupportFragmentManager();
-                                    FragmentTransaction ft = fm.beginTransaction();
-                                    ft.replace(R.id.fragment_container, fragmentCalendary);
-                                    ft.commit();
-                                }catch (Exception e){
-                                    Toast.makeText(getContext().getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                                A.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                                B.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                C.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                args.putString("ABC", "A");
                             }
                         }
                 );
@@ -135,19 +132,10 @@ public class FragmentCalendary extends Fragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                try {
-                                    Bundle args = new Bundle();
-                                    args.putString("type", controlIfAd);
-                                    args.putString("u_id", uid);
-                                    args.putString("ABC", "B");
-                                    fragmentCalendary.setArguments(args);
-                                    FragmentManager fm = (getActivity()).getSupportFragmentManager();
-                                    FragmentTransaction ft = fm.beginTransaction();
-                                    ft.replace(R.id.fragment_container, fragmentCalendary);
-                                    ft.commit();
-                                }catch (Exception e){
-                                    Toast.makeText(getContext().getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                                A.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                B.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                                C.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                args.putString("ABC", "B");
                             }
                         }
                 );
@@ -155,12 +143,17 @@ public class FragmentCalendary extends Fragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                A.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                B.setBackgroundColor(v.getResources().getColor(android.R.color.white));
+                                C.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
+                                args.putString("ABC", "C");
+                            }
+                        }
+                );
+                builder.setPositiveButton("confirm",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
                                 try {
-
-                                    Bundle args = new Bundle();
-                                    args.putString("type", controlIfAd);
-                                    args.putString("u_id", uid);
-                                    args.putString("ABC", "C");
                                     fragmentCalendary.setArguments(args);
                                     FragmentManager fm = (getActivity()).getSupportFragmentManager();
                                     FragmentTransaction ft = fm.beginTransaction();
@@ -170,8 +163,13 @@ public class FragmentCalendary extends Fragment {
                                     Toast.makeText(getContext().getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        }
-                );
+                        });
+                builder.setNegativeButton("delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
                 builder.setView(dialogView);
                 builder.show();
             }

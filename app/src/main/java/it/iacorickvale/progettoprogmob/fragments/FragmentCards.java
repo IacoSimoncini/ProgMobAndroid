@@ -67,12 +67,7 @@ public class FragmentCards extends Fragment  {
         ABC =  this.getArguments().getString("ABC");
         String control = this.getArguments().getString("type");
         if(control.equals("admin")){ current_uid = this.getArguments().getString("u_id"); }
-        if(!this.getArguments().getString("SelectedDay").equals("all")){
-            currentDay = this.getArguments().getString("SelectedDay");
-            whichSet = true;
-        }else{
-            whichSet = false;
-        }
+        currentDay = this.getArguments().getString("SelectedDay");
         recyclerView = view.findViewById(R.id.rv_cards);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         RecyclerView.ItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
@@ -89,34 +84,28 @@ public class FragmentCards extends Fragment  {
                 aux = false;
             }
             final String doc = docref_user;
-            Log.d("NON ADMIN" , doc);
-            if(whichSet){
-                DatabaseReferences.listCards(doc, currentDay)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        if(ABC == null) {
-                                            Cards card = new Cards(document.getId(), doc, document.get("type").toString());
-                                            listCards.add(card);
-                                        }else{
-                                            if (ABC.equals(document.get("type").toString())){
-                                                Log.d("IN QUESTO CAZZO DI CASO", document.get("type").toString());
-                                                Cards card = new Cards(document.getId(), doc, document.get("type").toString());
-                                                listCards.add(card);
-                                            };
-                                        }
+
+            DatabaseReferences.listCards(doc, currentDay)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (ABC.equals(document.get("type").toString())){
+                                        Cards card = new Cards(document.getId(), doc, document.get("type").toString());
+                                        listCards.add(card);
                                     }
                                 }
                             }
-                        }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        cardsAdapter.notifyDataSetChanged();
-                    }
-                });
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    cardsAdapter.notifyDataSetChanged();
+                }
+            });
+                /*
             }else{
                 for (String d : days){
                     DatabaseReferences.listCards(doc, d)
@@ -138,7 +127,7 @@ public class FragmentCards extends Fragment  {
                         }
                     });
                 }
-            }
+            }*/
         } catch (Exception e) {
 
     }
