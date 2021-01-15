@@ -57,6 +57,7 @@ public class EserciziAdapter extends RecyclerView.Adapter<EserciziAdapter.CViewH
         this.path = path;
         this.ref = ref;
         this.isAdmin = isAdmin;
+        this.currentDay = currentDay;
         this.context = inflater.getContext();
     }
 
@@ -104,14 +105,11 @@ public class EserciziAdapter extends RecyclerView.Adapter<EserciziAdapter.CViewH
                     alertDialog.setTitle("Delete the Exercise?");
                     View dialogView = inflater.inflate(R.layout.delete_ex, null);
                     alertDialog.setView(dialogView);
-
                     alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                             final CollectionReference colRef = DatabaseReferences.listExCard(ref, path, currentDay);
-                            colRef.get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            colRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if(task.isSuccessful()) {

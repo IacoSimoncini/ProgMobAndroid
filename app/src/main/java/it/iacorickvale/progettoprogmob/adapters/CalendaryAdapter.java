@@ -90,8 +90,7 @@ public class CalendaryAdapter extends RecyclerView.Adapter<CalendaryAdapter.CVie
                     fragmentCards.setArguments(args);
                     FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.fragment_container, fragmentCards);
-                    ft.commit();
+                    ft.replace(R.id.fragment_container, fragmentCards).addToBackStack(null).commit();
                 }
             });
         }else{

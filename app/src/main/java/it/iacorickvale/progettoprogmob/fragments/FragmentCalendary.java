@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,7 @@ import static it.iacorickvale.progettoprogmob.firebase.CardsFunctions.createCard
 public class FragmentCalendary extends Fragment {
     private RecyclerView recyclerView;
     private Button changeType;
+    private TextView curr_mode;
     private CalendaryAdapter calendaryAdapter;
     private ArrayList<Integer> days = new ArrayList<Integer>();
     private ArrayList<Cards> struttura = new ArrayList<Cards>();
@@ -70,6 +72,8 @@ public class FragmentCalendary extends Fragment {
 
         type = this.getArguments().getString("ABC");
         days = fillDays(days, nday);
+        curr_mode = view.findViewById(R.id.curr_mode);
+        curr_mode.setText(type);
 
         for(final Integer d : days){
             DatabaseReferences.listCards(uid, String.valueOf(d+1)).get().addOnCompleteListener(
@@ -108,7 +112,7 @@ public class FragmentCalendary extends Fragment {
             public void onClick(View v) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 View dialogView = inflater.inflate(R.layout.switch_type, null);
-                builder.setTitle("CHOOSE TYPE");
+                builder.setTitle("CHOOSE TYPE:");
                 final Bundle args = new Bundle();
                 args.putString("type", controlIfAd);
                 args.putString("u_id", uid);

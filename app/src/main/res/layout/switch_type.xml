@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    android:layout_width="90dp"
-    android:layout_height="90dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:stretchColumns="0,1"
     android:gravity="center">
 
@@ -13,10 +13,10 @@
 
         <Button
             android:id="@+id/A"
-            android:layout_width="90dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:text="Easy"
+            android:text="A"
             />
     </TableRow>
 
@@ -27,10 +27,10 @@
 
         <Button
             android:id="@+id/B"
-            android:layout_width="90dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:text="Medium"
+            android:text="B"
             />
     </TableRow>
 
@@ -40,10 +40,10 @@
         >
         <Button
             android:id="@+id/C"
-            android:layout_width="90dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:text="Hard"
+            android:text="C"
             />
 
     </TableRow>

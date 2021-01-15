@@ -64,8 +64,6 @@ public class FragmentEsercizi extends Fragment {
     private Integer ndays = 0;
     boolean[] checkedItemsArray;
 
-    Button btnDel;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -3,6 +3,8 @@ package it.iacorickvale.progettoprogmob.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.Gravity;
@@ -88,13 +90,13 @@ public class AdapterAll extends RecyclerView.Adapter<AdapterAll.CViewHolder> {
                 final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
                 View dialogView = inflater.inflate(R.layout.description_ex, null);
                 alertDialog.setView(dialogView);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 //alertDialog.setMessage(struttura.get(position).getDescription());
                 TextView descText = dialogView.findViewById(R.id.text_descrizione);
                 descText.setGravity(Gravity.CENTER);
                 descText.setText(struttura.get(position).getDescription());
                 Button btn = dialogView.findViewById(R.id.btn_dlg);
                 btn.setGravity(Gravity.CENTER);
-
                 alertDialog.show();
             }
         });

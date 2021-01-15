@@ -5,24 +5,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:fontFamily="@font/bangers"
-        android:paddingLeft="10dp"
-        android:text=""
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_cards"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/textView8"
-        android:layout_marginTop="38dp"
-        android:layout_marginBottom="108dp"
         android:fontFamily="@font/roboto"
         android:textSize="18sp">
 

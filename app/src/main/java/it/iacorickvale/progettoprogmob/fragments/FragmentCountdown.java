@@ -80,8 +80,8 @@ public class FragmentCountdown extends Fragment {
         assert this.getArguments() != null;
         timeLeftInMilliseconds = this.getArguments().getLong("timeLeftInMilliseconds");
         timePauseInMilliseconds = this.getArguments().getLong("timePauseInMilliseconds");
-        k = 100000/timeLeftInMilliseconds;
-        h = 100000/timePauseInMilliseconds;
+        k = 60000/timeLeftInMilliseconds;
+        h = 60000/timePauseInMilliseconds;
         hok = k;
         path = this.getArguments().getString("path");
         ref = this.getArguments().getString("ref");
@@ -118,32 +118,33 @@ public class FragmentCountdown extends Fragment {
                     currentExDiff.setText("");
                     currentExName.setText("READY?");
                     countdown.setText("");
-
+                    if (listEserciziScheda.size()!=0){
+                        StartAndStopBtn.setVisibility(View.VISIBLE);
+                        StartAndStopBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (firstTime) {
+                                    firstTime = false;
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    progressBar.setProgress(1000);
+                                    index += 1;
+                                    currentExDiff.setText(diffCountdown[index]);
+                                    currentExName.setText(exCountdown[index]);
+                                }
+                                timerRunning = !timerRunning;
+                                startStop();
+                            }
+                        });
+                    }else {
+                        currentExName.setText("NO EXERCISE");
+                        StartAndStopBtn.setVisibility(View.INVISIBLE);
+                    }
                 }
             });
         }catch (Exception e){
             Toast.makeText(getContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        if (listEserciziScheda.isEmpty()){
-            currentExName.setText("NO EXERCISE");
-            StartAndStopBtn.setVisibility(View.INVISIBLE);
-        }else {
-            StartAndStopBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (firstTime) {
-                        firstTime = false;
-                        progressBar.setVisibility(View.VISIBLE);
-                        progressBar.setProgress(1000);
-                        index += 1;
-                        currentExDiff.setText(diffCountdown[index]);
-                        currentExName.setText(exCountdown[index]);
-                    }
-                    timerRunning = !timerRunning;
-                    startStop();
-                }
-            });
-        }
+
         return view;
     }
 
@@ -172,8 +173,8 @@ public class FragmentCountdown extends Fragment {
                 if ((index < exCountdown.length)) {
                     if(!diffCountdown[index-1].equals(diffCountdown[index]) && !inPause){
                         inPause = true;
-                        currentExDiff.setText("BREAK");
-                        currentExName.setText("NEXT: " + diffCountdown[index]);
+                        currentExDiff.setText("NOW BREAK");
+                        currentExName.setText("next: " + diffCountdown[index]);
                         hok = h;
                         index -= 1;
                     }
@@ -206,11 +207,10 @@ public class FragmentCountdown extends Fragment {
     public void updateTimer(){
         int seconds = (int) timeLeftInMilliseconds % 60000 / 1000;
         String timeLeftText;
-        timeLeftText= "0:"+seconds;
-        if(seconds < 6){
-            //countdown.setTextColor(Integer.parseInt("#cb3234"));
+        if(seconds < 10){
+            timeLeftText= "0:0"+seconds;
         }else{
-            //countdown.setTextColor();
+            timeLeftText= "0:"+seconds;
         }
         countdown.setText(timeLeftText);
     }

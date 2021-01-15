@@ -105,34 +105,11 @@ public class FragmentCards extends Fragment  {
                     cardsAdapter.notifyDataSetChanged();
                 }
             });
-                /*
-            }else{
-                for (String d : days){
-                    DatabaseReferences.listCards(doc, d)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Cards card = new Cards(document.getId(), doc, document.get("type").toString());
-                                            listCards.add(card);
-                                        }
-                                    }
-                                }
-                            }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            cardsAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }*/
         } catch (Exception e) {
 
     }
 
-        cardsAdapter = new CardsAdapter(getContext(), listCards, aux, currentDay);
+        cardsAdapter = new CardsAdapter(getContext(), listCards, aux, currentDay, ABC);
         recyclerView.setAdapter(cardsAdapter);
 
         listCards.clear();

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="250dp"
 
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@drawable/dialog_bg"
+        android:padding="20dp"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical">
 
@@ -19,9 +16,9 @@
             android:fontFamily="@font/roboto"
             android:textColor="@color/black"
             android:textSize="30sp"
-            android:text="Description:"
+            android:text="@string/description"
             android:gravity="center"
-            android:textStyle="italic" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_descrizione"
@@ -32,7 +29,7 @@
             android:fontFamily="@font/roboto"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:textStyle="italic" />
+             />
 
         <Button
             android:id="@+id/btn_dlg"
@@ -44,4 +41,3 @@
 
 
     </LinearLayout>
-</ScrollView>

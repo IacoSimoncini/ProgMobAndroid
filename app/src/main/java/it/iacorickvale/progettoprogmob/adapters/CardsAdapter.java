@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +41,7 @@ import it.iacorickvale.progettoprogmob.MainActivity;
 import it.iacorickvale.progettoprogmob.R;
 import it.iacorickvale.progettoprogmob.firebase.CardsFunctions;
 import it.iacorickvale.progettoprogmob.firebase.DatabaseReferences;
+import it.iacorickvale.progettoprogmob.fragments.FragmentCalendary;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCountdown;
 import it.iacorickvale.progettoprogmob.fragments.FragmentEsercizi;
 import it.iacorickvale.progettoprogmob.utilities.Cards;
@@ -51,20 +54,24 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
     private Context context;
     private FragmentEsercizi fragmentEsercizi;
     private FragmentCountdown fragmentCountdown;
+    private FragmentCalendary fragmentCalendary;
     private ArrayList<Cards> struttura ;
     private LayoutInflater inflater;
     private Boolean control_ifAd;
     private long timeLeftInMilliseconds = 0;
     private long timePauseInMilliseconds = 0;
     private String currentDay;
+    private String ABC;
 
-    public CardsAdapter(Context ctx, ArrayList<Cards> struttura , Boolean aux, String currentDay) {
+    public CardsAdapter(Context ctx, ArrayList<Cards> struttura , Boolean aux, String currentDay, String ABC) {
         this.inflater = LayoutInflater.from(ctx);
         this.struttura = struttura;
         this.control_ifAd = aux;
         this.currentDay = currentDay;
         this.context = inflater.getContext();
+        this.ABC = ABC;
     }
+
     public class CViewHolder extends RecyclerView.ViewHolder{
             TextView textPath;
             LinearLayout parentLayout;
@@ -140,6 +147,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
             holder.btnDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final String uid = struttura.get(position).getRef();
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());//Here I have to use v.getContext() istead of just cont.
                     alertDialog.setTitle("Delete the Card?");
                     View dialogView = inflater.inflate(R.layout.delete_ex, null);
@@ -152,6 +160,21 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                     struttura.remove(holder.getAdapterPosition());
                     notifyItemRemoved(holder.getAdapterPosition());
                     notifyDataSetChanged();
+                    if (struttura.isEmpty()){
+                        fragmentCalendary = new FragmentCalendary();
+                        Bundle args = new Bundle();
+                        if(control_ifAd) {
+                            args.putString("type", "admin");
+                            args.putString("u_id" , uid);
+                        }else{
+                            args.putString("type" , "noadmin");
+                        }
+                        args.putString("ABC", ABC);
+                        fragmentCalendary.setArguments(args);
+                        FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        ft.replace(R.id.fragment_container, fragmentCalendary).addToBackStack(null).commit();
+                    }
 
                 }
             });
@@ -178,18 +201,17 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                                if(struttura.size() > 0){
                 final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 View dialogView = inflater.inflate(R.layout.difficulty_card, null);
-                builder.setTitle("CHOOSE DIFFICULTY");
+                builder.setTitle("CHOOSE DIFFICULTY:");
                 builder.setView(dialogView);
                 final Button bEasy = dialogView.findViewById(R.id.easy_btn);
                 final Button bMedium = dialogView.findViewById(R.id.medium_btn);
                 final Button bHard = dialogView.findViewById(R.id.hard_btn);
-                Button bStart = dialogView.findViewById(R.id.hard_btn);
-                Button bGoto = dialogView.findViewById(R.id.goto_btn);
+                /*final Button bGoto = dialogView.findViewById(R.id.goto_btn);*/
                 bEasy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        timeLeftInMilliseconds = 15000;
-                        timePauseInMilliseconds = 60000;
+                        timeLeftInMilliseconds = 5000;
+                        timePauseInMilliseconds = 15000;
                         bEasy.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
                         bHard.setBackgroundColor(v.getResources().getColor(android.R.color.white));
                         bMedium.setBackgroundColor(v.getResources().getColor(android.R.color.white));
@@ -198,8 +220,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                 bMedium.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        timeLeftInMilliseconds = 30000;
-                        timePauseInMilliseconds = 30000;
+                        timeLeftInMilliseconds = 10000;
+                        timePauseInMilliseconds = 10000;
                         bEasy.setBackgroundColor(v.getResources().getColor(android.R.color.white));
                         bMedium.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
                         bHard.setBackgroundColor(v.getResources().getColor(android.R.color.white));
@@ -208,14 +230,40 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                 bHard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        timeLeftInMilliseconds = 60000;
-                        timePauseInMilliseconds = 15000;
+                        timeLeftInMilliseconds = 15000;
+                        timePauseInMilliseconds = 5000;
                         bEasy.setBackgroundColor(v.getResources().getColor(android.R.color.white));
                         bMedium.setBackgroundColor(v.getResources().getColor(android.R.color.white));
                         bHard.setBackground(ResourcesCompat.getDrawable(v.getResources(), R.drawable.whiteline_background, null));
                     }
                 });
-                bGoto.setOnClickListener(new View.OnClickListener() {
+
+                builder.setPositiveButton("confirm",
+                new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (timePauseInMilliseconds!=0 && timeLeftInMilliseconds!=0){
+                        try {
+                            fragmentCountdown = new FragmentCountdown();
+                            String path_scheda = struttura.get(position).getPath();
+                            String ref= struttura.get(position).getRef();
+                            Bundle args = new Bundle();
+                            args.putLong("timeLeftInMilliseconds",  timeLeftInMilliseconds);
+                            args.putLong("timePauseInMilliseconds", timePauseInMilliseconds);
+                            args.putString("path", path_scheda);
+                            args.putString("ref", ref);
+                            args.putString("currentDay", currentDay);
+                            fragmentCountdown.setArguments(args);
+                            FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+                            FragmentTransaction ft = fm.beginTransaction();
+                            ft.replace(R.id.fragment_container, fragmentCountdown).addToBackStack(null).commit();
+                        }catch (Exception e){
+                            Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                });
+
+                /*bGoto.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (timePauseInMilliseconds!=0 && timeLeftInMilliseconds!=0){
@@ -232,14 +280,13 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                                 fragmentCountdown.setArguments(args);
                                 FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
                                 FragmentTransaction ft = fm.beginTransaction();
-                                ft.replace(R.id.fragment_container, fragmentCountdown);
-                                ft.commit();
+                                ft.replace(R.id.fragment_container, fragmentCountdown).addToBackStack(null).commit();
                             }catch (Exception e){
                                 Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
-                });
+                });*/
                 builder.show();
 
             }
