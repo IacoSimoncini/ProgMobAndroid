@@ -188,6 +188,7 @@ public class FragmentCountdown extends Fragment {
                     timeLeftInMilliseconds = timePauseInMilliseconds ;
                     startStop();
                 }else{
+                    progressBar.setVisibility(View.INVISIBLE);
                     countdown.setText("END");
                     currentExDiff.setText("");
                     currentExName.setText("");
