@@ -73,7 +73,7 @@ public class FragmentCalendary extends Fragment {
         type = this.getArguments().getString("ABC");
         days = fillDays(days, nday);
         curr_mode = view.findViewById(R.id.curr_mode);
-        curr_mode.setText(type);
+        curr_mode.setText("Current mode: "+type);
 
         for(final Integer d : days){
             DatabaseReferences.listCards(uid, String.valueOf(d+1)).get().addOnCompleteListener(

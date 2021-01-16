@@ -18,7 +18,7 @@
     <string name="current">Currently on Mode:</string>
     <string name="already_registered_log_in">Login</string>
     <string name="logout">Logout</string>
-    <string name="login">LOGIN WITH YOUR DATA</string>
+    <string name="login">LOGIN</string>
     <string name="new_here_create_account">Create Account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="user">User</string>

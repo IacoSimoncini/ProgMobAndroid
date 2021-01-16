@@ -10,19 +10,21 @@
         android:layout_height="145dp"
         android:clickable="false"
         android:foreground="@drawable/rounded_fg"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.435"
+        app:layout_constraintVertical_bias="0.891"
         app:srcCompat="@drawable/icon" />
 
     <TextView
+        android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
         android:gravity="center"
         android:text="@string/app_name"
+        android:layout_margin="10dp"
         android:textColor="#000000"
         android:textSize="25sp"
         android:textStyle="bold"
