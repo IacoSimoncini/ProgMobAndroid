@@ -262,31 +262,13 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                     }
                 }
                 });
-
-                /*bGoto.setOnClickListener(new View.OnClickListener() {
+                builder.setNegativeButton("Negate", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        if (timePauseInMilliseconds!=0 && timeLeftInMilliseconds!=0){
-                            try {
-                                fragmentCountdown = new FragmentCountdown();
-                                String path_scheda = struttura.get(position).getPath();
-                                String ref= struttura.get(position).getRef();
-                                Bundle args = new Bundle();
-                                args.putLong("timeLeftInMilliseconds",  timeLeftInMilliseconds);
-                                args.putLong("timePauseInMilliseconds", timePauseInMilliseconds);
-                                args.putString("path", path_scheda);
-                                args.putString("ref", ref);
-                                args.putString("currentDay", currentDay);
-                                fragmentCountdown.setArguments(args);
-                                FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
-                                FragmentTransaction ft = fm.beginTransaction();
-                                ft.replace(R.id.fragment_container, fragmentCountdown).addToBackStack(null).commit();
-                            }catch (Exception e){
-                                Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                    public void onClick(DialogInterface dialog, int which) {
+                                           // Close dialog
                     }
-                });*/
+                });
+
                 builder.show();
 
             }

@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                                         break;
                                 }
                                 if(selectedFragment != null) {
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).addToBackStack(null).commit();
                                 }
                                 return true;
                             }
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                     args.putString("type", "noadmin");
                                     args.putString("ABC", "A");
                                     selectedFragment.setArguments(args);
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).addToBackStack(null).commit();
                                 }
                                 return true;
                             }

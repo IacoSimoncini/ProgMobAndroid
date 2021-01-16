@@ -210,10 +210,8 @@ public class FragmentEsercizi extends Fragment {
                     exList = Arrays.asList(allEsercizi);
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
                     builder.setTitle("Choose Exercises to add");
                     builder.setView(inflater.inflate(R.layout.dialog_list, null));
-
                     builder.setMultiChoiceItems(allEsercizi, checkedItemsArray, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
