@@ -80,8 +80,8 @@ public class FragmentCountdown extends Fragment {
         assert this.getArguments() != null;
         timeLeftInMilliseconds = this.getArguments().getLong("timeLeftInMilliseconds");
         timePauseInMilliseconds = this.getArguments().getLong("timePauseInMilliseconds");
-        k = 60000/timeLeftInMilliseconds;
-        h = 60000/timePauseInMilliseconds;
+        k = 100000/timeLeftInMilliseconds;
+        h = 100000/timePauseInMilliseconds;
         hok = k;
         path = this.getArguments().getString("path");
         ref = this.getArguments().getString("ref");
@@ -161,9 +161,9 @@ public class FragmentCountdown extends Fragment {
         countDownTimer = new CountDownTimer(timeLeftInMilliseconds , 1000){
             @Override
             public void onTick(long l){
+                timeLeftInMilliseconds = l;
                 int progress = (int) ((hok*l/1000)-1);
                 progressBar.setProgress(progress);
-                timeLeftInMilliseconds = l;
                 updateTimer();
             }
             @Override
@@ -172,15 +172,15 @@ public class FragmentCountdown extends Fragment {
                 index += 1;
                 if ((index < exCountdown.length)) {
                     if(!diffCountdown[index-1].equals(diffCountdown[index]) && !inPause){
+                        hok = h;
                         inPause = true;
                         currentExDiff.setText("NOW BREAK");
-                        currentExName.setText("next: " + diffCountdown[index]);
-                        hok = h;
+                        currentExName.setText("Next: " + diffCountdown[index]);
                         index -= 1;
                     }
                     else{
-                        inPause = false;
                         hok = k;
+                        inPause = false;
                         currentExDiff.setText(diffCountdown[index]);
                         currentExName.setText(exCountdown[index]);
                     }
@@ -208,10 +208,10 @@ public class FragmentCountdown extends Fragment {
     public void updateTimer(){
         int seconds = (int) timeLeftInMilliseconds % 60000 / 1000;
         String timeLeftText;
-        if(seconds < 10){
-            timeLeftText= "0:0"+seconds;
+        if(seconds < 9){
+            timeLeftText= "0:0"+(seconds+1);
         }else{
-            timeLeftText= "0:"+seconds;
+            timeLeftText= "0:"+(seconds+1);
         }
         countdown.setText(timeLeftText);
     }
