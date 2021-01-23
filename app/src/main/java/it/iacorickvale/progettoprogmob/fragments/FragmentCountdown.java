@@ -26,6 +26,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.protobuf.StringValue;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,11 +50,12 @@ public class FragmentCountdown extends Fragment {
     private CountDownTimer countDownTimer;
     private long timeLeftInMilliseconds = 0;
     private long timePauseInMilliseconds = 0;
+    private long time = 0;
     private boolean timerRunning;
     private ArrayList<Esercizi> listEserciziScheda = new ArrayList<>();
     private boolean inPause;
     private boolean firstTime = true;
-    private int index;
+    private int index = 0;
     private int lenght;
     private String currentDay;
     private String exCountdown[];
@@ -114,7 +116,6 @@ public class FragmentCountdown extends Fragment {
                         Log.d(exCountdown[i], "onSuccess: ");
                         i+=1;
                     }
-                    index = -1;
                     currentExDiff.setText("");
                     currentExName.setText("READY?");
                     countdown.setText("");
@@ -127,7 +128,7 @@ public class FragmentCountdown extends Fragment {
                                     firstTime = false;
                                     progressBar.setVisibility(View.VISIBLE);
                                     progressBar.setProgress(1000);
-                                    index += 1;
+                                    time = timeLeftInMilliseconds;
                                     currentExDiff.setText(diffCountdown[index]);
                                     currentExName.setText(exCountdown[index]);
                                 }
@@ -158,11 +159,11 @@ public class FragmentCountdown extends Fragment {
     }
 
     public void startTimer(){
-        countDownTimer = new CountDownTimer(timeLeftInMilliseconds , 1000){
+        countDownTimer = new CountDownTimer(time, 1000){
             @Override
             public void onTick(long l){
-                timeLeftInMilliseconds = l;
-                int progress = (int) ((hok*l/1000)-1);
+                time = l;
+                int progress = (int) ((hok*l)/1000);
                 progressBar.setProgress(progress);
                 updateTimer();
             }
@@ -174,18 +175,21 @@ public class FragmentCountdown extends Fragment {
                     if(!diffCountdown[index-1].equals(diffCountdown[index]) && !inPause){
                         hok = h;
                         inPause = true;
+                        Log.d("in pausa ", String.valueOf(hok));
+                        time = timePauseInMilliseconds;
                         currentExDiff.setText("NOW BREAK");
-                        currentExName.setText("Next: " + diffCountdown[index]);
+                        currentExName.setText("next: " + diffCountdown[index]);
                         index -= 1;
                     }
                     else{
                         hok = k;
                         inPause = false;
+                        time = timeLeftInMilliseconds;
+                        Log.d("NON in pausa ", String.valueOf(hok));
                         currentExDiff.setText(diffCountdown[index]);
                         currentExName.setText(exCountdown[index]);
                     }
                     countdown.setText("");
-                    timeLeftInMilliseconds = timePauseInMilliseconds ;
                     startStop();
                 }else{
                     progressBar.setVisibility(View.INVISIBLE);
@@ -197,7 +201,6 @@ public class FragmentCountdown extends Fragment {
             }
         }.start();
         StartAndStopBtn.setText("Pause");
-        //timerRunning = f;
     }
 
     public void stopTimer(){
@@ -206,7 +209,7 @@ public class FragmentCountdown extends Fragment {
     }
 
     public void updateTimer(){
-        int seconds = (int) timeLeftInMilliseconds % 60000 / 1000;
+        int seconds = (int) time % 60000 / 1000;
         String timeLeftText;
         if(seconds < 9){
             timeLeftText= "0:0"+(seconds+1);

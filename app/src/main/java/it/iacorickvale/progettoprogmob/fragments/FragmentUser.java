@@ -1,6 +1,8 @@
 package it.iacorickvale.progettoprogmob.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,10 +36,17 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import it.iacorickvale.progettoprogmob.R;
+import it.iacorickvale.progettoprogmob.firebase.CardsFunctions;
+import it.iacorickvale.progettoprogmob.utilities.Cards;
+
+import static it.iacorickvale.progettoprogmob.firebase.UsersFunctions.modifyUserEmail;
+import static it.iacorickvale.progettoprogmob.firebase.UsersFunctions.modifyUserName;
+import static it.iacorickvale.progettoprogmob.firebase.UsersFunctions.modifyUserPhone;
+import static it.iacorickvale.progettoprogmob.firebase.UsersFunctions.modifyUserSurname;
 
 public class FragmentUser extends Fragment {
 
-    private TextView fullName, email, phone;
+    private TextView firstName, lastName, email, phone;
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
     private String userId;
@@ -51,11 +61,10 @@ public class FragmentUser extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
-
-        fullName = view.findViewById(R.id.user_mfullname);
+        firstName = view.findViewById(R.id.user_mfirstname);
+        lastName = view.findViewById(R.id.user_mlastname);
         email = view.findViewById(R.id.user_memail);
         phone = view.findViewById(R.id.user_mphone);
-
         profileImage = view.findViewById(R.id.user_image);
 
         fAuth = FirebaseAuth.getInstance();
@@ -82,7 +91,8 @@ public class FragmentUser extends Fragment {
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                     if(documentSnapshot != null ? documentSnapshot.exists() : false){
                         phone.setText(documentSnapshot.getString("phone"));
-                        fullName.setText(documentSnapshot.getString("firstname"));
+                        firstName.setText(documentSnapshot.getString("firstname"));
+                        lastName.setText(documentSnapshot.getString("lastname"));
                         email.setText(documentSnapshot.getString("email"));
                     } else {
                         Log.d("tag", "onEvent: Document do not exists");
@@ -99,7 +109,141 @@ public class FragmentUser extends Fragment {
                 // open gallery
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGalleryIntent, 1000);
+            }
+        });
 
+
+        firstName.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());//Here I have to use v.getContext() istead of just cont.
+                alertDialog.setTitle("Change Name");
+                final EditText name = new EditText(v.getContext());
+                alertDialog.setView(name);
+                alertDialog.setPositiveButton("confirm",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if( name.getText().toString().equals("")){
+                                    Toast.makeText(getContext(), "Impossible to Update:" + "\nInsert new name", Toast.LENGTH_SHORT).show();
+                                }
+                                else if( name.getText().toString().length() > 20)
+                                {
+                                    Toast.makeText(getContext(), "Impossible to Update:" + "\nName must be <20", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    String newName = name.getText().toString();
+                                    modifyUserName(userId,newName);
+                                }
+                            }
+                        }
+                );
+                alertDialog.setNegativeButton("delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
+
+        lastName.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());//Here I have to use v.getContext() istead of just cont.
+                alertDialog.setTitle("Change Surname");
+                final EditText name = new EditText(v.getContext());
+                alertDialog.setView(name);
+                alertDialog.setPositiveButton("confirm",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if( name.getText().toString().equals("")){
+                                    Toast.makeText(getContext(), "Impossible to Update:" + "\nInsert new name", Toast.LENGTH_SHORT).show();
+                                }
+                                else if( name.getText().toString().length() > 20)
+                                {
+                                    Toast.makeText(getContext(), "Impossible to Update:" + "\nSurname must be <20", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    String newName = name.getText().toString();
+                                    modifyUserSurname(userId,newName);
+                                }
+                            }
+                        }
+                );
+                alertDialog.setNegativeButton("delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
+        phone.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());//Here I have to use v.getContext() istead of just cont.
+                alertDialog.setTitle("Change Number");
+                final EditText name = new EditText(v.getContext());
+                alertDialog.setView(name);
+                alertDialog.setPositiveButton("confirm",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if( name.getText().toString().equals("")){
+                                    Toast.makeText(getContext(), "Impossible to Update:" + "\nInsert new Phone Number", Toast.LENGTH_SHORT).show();
+                                }
+                                else if( name.getText().toString().length() > 20)
+                                {
+                                    Toast.makeText(getContext(), "Impossible to Update:" + "\nNumber must be <20", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    String newName = name.getText().toString();
+                                    modifyUserPhone(userId,newName);
+                                }
+                            }
+                        }
+                );
+                alertDialog.setNegativeButton("delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
+        email.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());//Here I have to use v.getContext() istead of just cont.
+                alertDialog.setTitle("Change email");
+                final EditText name = new EditText(v.getContext());
+                alertDialog.setView(name);
+                alertDialog.setPositiveButton("confirm",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if( name.getText().toString().equals("")){
+                                    Toast.makeText(getContext(), "Impossible to Update:" + "\nInsert new email", Toast.LENGTH_SHORT).show();
+                                }
+                                else if( name.getText().toString().length() > 20)
+                                {
+                                    Toast.makeText(getContext(), "Impossible to Update:" + "\nemail must be <20", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    String newName = name.getText().toString();
+                                    modifyUserEmail(userId,newName);
+                                }
+                            }
+                        }
+                );
+                alertDialog.setNegativeButton("delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                alertDialog.show();
             }
         });
 

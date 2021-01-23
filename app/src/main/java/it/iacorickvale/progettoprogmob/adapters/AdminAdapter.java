@@ -1,10 +1,13 @@
 package it.iacorickvale.progettoprogmob.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,11 +20,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import it.iacorickvale.progettoprogmob.MainActivity;
 import it.iacorickvale.progettoprogmob.R;
+import it.iacorickvale.progettoprogmob.firebase.DatabaseReferences;
+import it.iacorickvale.progettoprogmob.firebase.UsersFunctions;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCalendary;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCards;
 import it.iacorickvale.progettoprogmob.utilities.Users;
@@ -42,12 +51,14 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.CViewHolder>
         TextView firstname, lastname;
         ImageView proPic;
         LinearLayout parentLayout;
+        Button btnDelete;
 
         public CViewHolder(@NonNull View itemView) {
             super(itemView);
             firstname = itemView.findViewById(R.id.user_firstname);
             lastname = itemView.findViewById(R.id.user_lastname);
             proPic = itemView.findViewById(R.id.user_propic);
+            btnDelete = itemView.findViewById(R.id.btnUser_delete);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
 
@@ -66,38 +77,9 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.CViewHolder>
         holder.lastname.setText(struttura.get(position).getLastname());
         if(struttura.get(position).getUri() != null) { Glide.with(context).load(struttura.get(position).getUri()).into(holder.proPic); }
 
-        /*holder.btnDelete.setVisibility(View.VISIBLE);
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());//Here I have to use v.getContext() istead of just cont.
-                alertDialog.setTitle("Delete the Card?");
-                View dialogView = inflater.inflate(R.layout.delete_ex, null);
-                alertDialog.setView(dialogView);
 
-                alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //holder.btnDel.
-                        UsersFunctions.deleteUser(struttura.get(position).getRef() , struttura.get(position).getPath());
-                        struttura.remove(holder.getAdapterPosition());
-                        notifyItemRemoved(holder.getAdapterPosition());
-                        notifyDataSetChanged();
 
-                    }
-                });
-                alertDialog.setNegativeButton("Negate", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Close dialog
-                    }
-                });
-                alertDialog.create().show();
-            }
-
-        });*/
-
-        /*holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+       holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
@@ -108,30 +90,10 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.CViewHolder>
                 alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DatabaseReferences.getUsers()
-                                .get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if(task.isSuccessful()) {
-                                            for (DocumentSnapshot document : task.getResult()) {
-                                                if(document.get("Id").toString().equals(struttura.get(position).getId())){
-                                                    Log.d("utente rimosso: ", struttura.get(position).getId());
-                                                    DatabaseReferences.getUserById(document.getId())
-                                                            .delete();
-                                                    removeAt(position);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                notifyDataSetChanged();
-
-                            }
-                        });
+                        UsersFunctions.deleteUser(struttura.get(position).getId());
+                        struttura.remove(position);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
                     }
                 });
                 alertDialog.setNegativeButton("Negate", new DialogInterface.OnClickListener() {
@@ -140,7 +102,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.CViewHolder>
                 });
                 alertDialog.create().show();
             }
-        });*/
+        });
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override

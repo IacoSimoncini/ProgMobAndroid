@@ -30,7 +30,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:background="@drawable/playbutton"
+            android:background="@drawable/ic_copy"
             android:padding="2dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"

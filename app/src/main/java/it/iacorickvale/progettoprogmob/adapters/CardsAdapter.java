@@ -60,6 +60,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
     private Boolean control_ifAd;
     private long timeLeftInMilliseconds = 0;
     private long timePauseInMilliseconds = 0;
+    private long timeIntLeft = 0;
+    private long timeIntPause = 0;
     private String currentDay;
     private String ABC;
 
@@ -198,7 +200,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
             holder.btnPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                               if(struttura.size() > 0){
+            if(struttura.size() > 0){
                 final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 View dialogView = inflater.inflate(R.layout.difficulty_card, null);
                 builder.setTitle("CHOOSE DIFFICULTY:");
@@ -247,6 +249,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                             String path_scheda = struttura.get(position).getPath();
                             String ref= struttura.get(position).getRef();
                             Bundle args = new Bundle();
+                            Log.d("1 left: "+String.valueOf(timeIntLeft), "pause: "+String.valueOf(timeIntPause));
+                            args.putLong("timeTot",  timeIntLeft);
                             args.putLong("timeLeftInMilliseconds",  timeLeftInMilliseconds);
                             args.putLong("timePauseInMilliseconds", timePauseInMilliseconds);
                             args.putString("path", path_scheda);

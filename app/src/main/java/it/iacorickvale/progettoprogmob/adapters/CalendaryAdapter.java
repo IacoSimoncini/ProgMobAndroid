@@ -77,7 +77,7 @@ public class CalendaryAdapter extends RecyclerView.Adapter<CalendaryAdapter.CVie
     public void onBindViewHolder(@NonNull CalendaryAdapter.CViewHolder holder, final int position) {
         holder.day.setText(String.valueOf(position+1));
         if(!(ifset[position]== null) && ifset[position]){
-            holder.btnDay.setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.barbell, null));
+            holder.btnDay.setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_copy, null));
             holder.btnDay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -211,7 +211,6 @@ public class FragmentEsercizi extends Fragment {
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Choose Exercises to add");
-                    builder.setView(inflater.inflate(R.layout.dialog_list, null));
                     builder.setMultiChoiceItems(allEsercizi, checkedItemsArray, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -219,12 +218,8 @@ public class FragmentEsercizi extends Fragment {
                             checkedItemsArray[which] = isChecked;
                             String currentItem = exList.get(which);
                             builder.setCancelable(false);
-                            builder.setTitle("Choose Exercises to add");
-
                         }
-
-                    });
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    }).setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             for (int i = 0; i < checkedItemsArray.length; i++) {
@@ -255,12 +250,7 @@ public class FragmentEsercizi extends Fragment {
                             }
                         }
                     });
-                    builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Close dialog window
-                        }
-                    });
+
                     builder.create().show();
                 }
         });

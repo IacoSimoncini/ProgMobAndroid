@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -40,6 +41,7 @@ import it.iacorickvale.progettoprogmob.utilities.Cards;
 
 import static it.iacorickvale.progettoprogmob.firebase.CardsFunctions.controlTypeDay;
 import static it.iacorickvale.progettoprogmob.firebase.CardsFunctions.createCard;
+import static it.iacorickvale.progettoprogmob.firebase.UsersFunctions.deleteUser;
 
 public class FragmentCalendary extends Fragment {
     private RecyclerView recyclerView;
@@ -61,7 +63,6 @@ public class FragmentCalendary extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-
         View view = inflater.inflate(R.layout.fragment_calendary, container, false);
         controlIfAd = this.getArguments().getString("type");
         if( controlIfAd.equals("admin")){ uid = this.getArguments().getString("u_id"); }

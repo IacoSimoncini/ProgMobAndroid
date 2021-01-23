@@ -12,56 +12,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <TextView
-        android:id="@+id/user_memail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:gravity="center"
-        android:text="Your email"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_email"
-        app:layout_constraintVertical_bias="0.054" />
 
-    <!--<ImageView
-        android:id="@+id/user_imagefullname"
-        android:layout_width="34dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/user_fullname"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.447"
-        app:srcCompat="@drawable/ic_user" />-->
-
-    <!--<ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="34dp"
-        android:layout_height="42dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.013"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_imagefullname"
-        app:layout_constraintVertical_bias="0.194"
-        app:srcCompat="@drawable/ic_mail" />-->
-
-    <!--<ImageView
-        android:id="@+id/imageView"
-        android:layout_width="34dp"
-        android:layout_height="42dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.271"
-        app:srcCompat="@drawable/ic_phone" />-->
 
     <ImageView
         android:id="@+id/user_image"
@@ -69,44 +20,91 @@
         android:layout_height="100dp"
         android:clickable="true"
         android:foreground="@drawable/rounded_fg"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/user_firstname"
         app:layout_constraintVertical_bias="0.07"
         app:srcCompat="@drawable/ic_account" />
 
     <TextView
-        android:id="@+id/user_fullname"
+        android:id="@+id/user_firstname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
         android:gravity="center"
-        android:text="@string/fullname"
+        android:text="@string/firstname"
         android:textColor="#000000"
         android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_image"
-        app:layout_constraintVertical_bias="0.113" />
+        app:layout_constraintTop_toBottomOf="@id/user_image"
+        app:layout_constraintBottom_toTopOf="@+id/user_mfirstname"
+        />
 
     <TextView
-        android:id="@+id/user_mfullname"
+        android:id="@+id/user_mfirstname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
         android:gravity="center"
-        android:text="Your name"
+        android:text=""
         android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_fullname"
-        app:layout_constraintVertical_bias="0.048" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/user_lastname"
+        app:layout_constraintTop_toBottomOf="@+id/user_image"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/user_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text="@string/lastname"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/user_mlastname"
+        app:layout_constraintTop_toBottomOf="@id/user_mfirstname"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/user_mlastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text=""
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/user_lastname"
+        app:layout_constraintBottom_toTopOf="@+id/user_phone"
+        />
+
+    <TextView
+        android:id="@+id/user_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text="@string/phone"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        app:layout_constraintTop_toBottomOf="@+id/user_mlastname"
+        app:layout_constraintBottom_toTopOf="@+id/user_mphone"
+        />
+
+    <TextView
+        android:id="@+id/user_mphone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text=""
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/user_phone"
+        app:layout_constraintBottom_toTopOf="@+id/user_email"
+    />
 
     <TextView
         android:id="@+id/user_email"
@@ -117,41 +115,23 @@
         android:text="@string/email"
         android:textColor="#000000"
         android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_mfullname"
-        app:layout_constraintVertical_bias="0.117"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintBottom_toTopOf="@+id/user_memail"
+        app:layout_constraintTop_toBottomOf="@+id/user_mphone"
+        tools:layout_editor_absoluteX="-16dp" />
 
     <TextView
-        android:id="@+id/user_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:fontFamily="@font/roboto"
-        android:text="@string/phone"
-        android:textColor="#000000"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_memail"
-        app:layout_constraintVertical_bias="0.206"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <TextView
-        android:id="@+id/user_mphone"
+        android:id="@+id/user_memail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
         android:gravity="center"
-        android:text="Your Phone"
+        android:text=""
         android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_phone"
-        app:layout_constraintVertical_bias="0.093" />
+        app:layout_constraintTop_toBottomOf="@+id/user_email"
+        tools:layout_editor_absoluteX="0dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
