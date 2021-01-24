@@ -162,8 +162,8 @@ public class FragmentCalendary extends Fragment {
                                     fragmentCalendary.setArguments(args);
                                     FragmentManager fm = (getActivity()).getSupportFragmentManager();
                                     FragmentTransaction ft = fm.beginTransaction();
-                                    ft.replace(R.id.fragment_container, fragmentCalendary);
-                                    ft.commit();
+
+                                    ft.replace(R.id.fragment_container, fragmentCalendary).addToBackStack(null).commit();
                                 }catch (Exception e){
                                     Toast.makeText(getContext().getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }

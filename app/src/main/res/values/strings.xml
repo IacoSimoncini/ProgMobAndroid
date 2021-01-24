@@ -26,8 +26,8 @@
     <string name="selectSource">Select source</string>
     <string name="phone">Phone Number</string>
     <string name="my_cards">Your Cards</string>
-    <string name="exercise_list">EXERCISES LIST</string>
-    <string name="user_list">USERS LIST</string>
+    <string name="exercise_list">EXERCISES</string>
+    <string name="user_list">USERS</string>
     <string name="exercise_name">Name</string>
     <string name="exercise_diff">Difficulty</string>
     <string name="exercise_desc">Description</string>
