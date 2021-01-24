@@ -127,14 +127,14 @@ public class FragmentAll extends Fragment {
                             ) {
                                 Toast.makeText(getContext(), "Impossible to Create:" + "\nNo empty spaces", Toast.LENGTH_SHORT).show();
                             }
-                            else if(name_ex.getText().toString().length() > 15)
+                            else if(name_ex.getText().toString().length() > 40)
                             {
-                                Toast.makeText(getContext(), "Impossible to Create:" + "\nName must be <=15", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Impossible to Create:" + "\nName must be <=40", Toast.LENGTH_SHORT).show();
                             }
 
-                            else if(desc_ex.getText().toString().length() > 50)
+                            else if(desc_ex.getText().toString().length() > 100)
                             {
-                                Toast.makeText(getContext(), "Impossible to Create:" + "\nDescription must be <=50", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Impossible to Create:" + "\nDescription must be <=100", Toast.LENGTH_SHORT).show();
                             }
 
                             else {
