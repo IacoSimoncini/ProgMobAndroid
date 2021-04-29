@@ -17,8 +17,7 @@ import it.iacorickvale.progettoprogmob.utilities.Esercizi;
 
 public class CardsFunctions {
 
-    private FirebaseFirestore db;// = FirebaseFirestore.getInstance();
-    private FirebaseAuth fAuth;// = FirebaseAuth.getInstance();
+
 
     public static void deleteCard(String ref, String path, String newDay){
         FirebaseFirestore.getInstance().collection("users")

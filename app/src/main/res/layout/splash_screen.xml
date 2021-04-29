@@ -9,7 +9,6 @@
         android:layout_width="145dp"
         android:layout_height="145dp"
         android:clickable="false"
-        android:foreground="@drawable/rounded_fg"
         app:layout_constraintBottom_toTopOf="@+id/textView11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

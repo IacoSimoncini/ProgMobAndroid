@@ -26,8 +26,8 @@
     <string name="selectSource">Select source</string>
     <string name="phone">Phone Number</string>
     <string name="my_cards">Your Cards</string>
-    <string name="exercise_list">EXERCISES LIST</string>
-    <string name="user_list">USERS LIST</string>
+    <string name="exercise_list">EXERCISES</string>
+    <string name="user_list">USERS</string>
     <string name="exercise_name">Name</string>
     <string name="exercise_diff">Difficulty</string>
     <string name="exercise_desc">Description</string>
@@ -46,5 +46,5 @@
     <string name="user_surname">Surname</string>
     <string name="user_name">Name</string>
     <string name="image">Image</string>
-    <string name="info">Siamo 3 studenti del III anno di Ingegneria Informatica e dell Automazione. Tale progetto è volto a sviluppare un applicazione mobile per Android riguardate una palestra organizzando le 4 settimane di allenamento perfette per ogni persona che voglia approcciarsi all allenamento fisico. L applicazione è poi strettamente legata ai meccanismi e funzionamenti del sistema di Databasing FIREBASE.</string>
+    <string name="info">Siamo 3 studenti del III anno di Ingegneria Informatica e dell\'Automazione. Tale progetto è volto a sviluppare un\'applicazione mobile per Android riguardante una palestra organizzando le 4 settimane di allenamento perfette per ogni persona che voglia approcciarsi all\'allenamento fisico. L\'applicazione è poi strettamente legata ai meccanismi e funzionamenti del sistema di Databasing FIREBASE.</string>
 </resources>

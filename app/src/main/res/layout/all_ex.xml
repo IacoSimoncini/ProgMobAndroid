@@ -31,8 +31,8 @@
 
         <TextView
             android:id="@+id/all_ex_name"
-            android:layout_width="170dp"
-            android:layout_height="30dp"
+            android:layout_width="223dp"
+            android:layout_height="44dp"
             android:layout_marginTop="2dp"
             android:fontFamily="@font/roboto"
             android:gravity="center_horizontal"
@@ -41,11 +41,10 @@
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.373"
+            app:layout_constraintHorizontal_bias="0.385"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.489"
-         />
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/btn_modify"

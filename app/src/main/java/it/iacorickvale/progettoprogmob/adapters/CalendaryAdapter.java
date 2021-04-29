@@ -95,7 +95,7 @@ public class CalendaryAdapter extends RecyclerView.Adapter<CalendaryAdapter.CVie
             });
         }else{
             if (controlAd.equals("admin")){
-                holder.btnDay.setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_plus, null));
+                holder.btnDay.setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.add, null));
                 holder.btnDay.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
