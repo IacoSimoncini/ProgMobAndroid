@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    >
+
+    <EditText
+        android:id="@+id/name_user"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:fontFamily="@font/roboto"
+        android:hint="@string/firstname"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/surname_user"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:fontFamily="@font/roboto"
+        android:hint="@string/lastname"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/phone_user"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:fontFamily="@font/roboto"
+        android:hint="@string/phone"
+        android:textSize="16sp" />
+</LinearLayout>
