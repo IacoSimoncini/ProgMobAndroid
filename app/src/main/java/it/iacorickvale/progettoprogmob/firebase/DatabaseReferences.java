@@ -37,6 +37,11 @@ public class DatabaseReferences {
                 .document(doc).collection(Day);
     }
 
+    public static DocumentReference getTotcal(String tot_cal){
+        return FirebaseFirestore.getInstance().collection("users")
+                .document();
+    }
+
     public static DocumentReference getCard(String ref, String path, String Day){
         return FirebaseFirestore.getInstance().collection("users")
                 .document(ref)

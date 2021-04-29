@@ -44,6 +44,7 @@ import it.iacorickvale.progettoprogmob.firebase.DatabaseReferences;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCalendary;
 import it.iacorickvale.progettoprogmob.fragments.FragmentCountdown;
 import it.iacorickvale.progettoprogmob.fragments.FragmentEsercizi;
+import it.iacorickvale.progettoprogmob.fragments.FragmentVideo;
 import it.iacorickvale.progettoprogmob.utilities.Cards;
 import it.iacorickvale.progettoprogmob.utilities.Esercizi;
 
@@ -188,6 +189,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CViewHolder>
                 }
 
             });
+
+
+
 
             holder.btnPlay.setVisibility(View.INVISIBLE);
         } else {

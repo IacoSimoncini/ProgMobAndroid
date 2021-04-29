@@ -80,12 +80,21 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         DocumentReference docRef = fStore.collection("users").document(fAuth.getCurrentUser().getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task ) {
                 if(task.isComplete()){
-                    String user_type = String.valueOf(task.getResult().get("admin"));
+                    final String user_type = String.valueOf(task.getResult().get("admin"));
+                    final String user_goal = String.valueOf(task.getResult().get("tot_cal"));
+                    final String user_name = String.valueOf(task.getResult().get("firstname"));
+                    final String user_lastname = String.valueOf(task.getResult().get("lastname"));
+                    final String user_phone = String.valueOf(task.getResult().get("phone"));
+                    final String user_uri = String.valueOf(task.getResult().get("uri"));
+                    final String user_real_goal = String.valueOf(task.getResult().get("goal"));
+                    final String user_email = String.valueOf(task.getResult().get("email"));
+
                     if((user_type.equals("admin"))){
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentAdmin).commit();
                         bottomNav = findViewById(R.id.bottom_nav);
@@ -133,8 +142,18 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 if(selectedFragment != null) {
                                     Bundle args = new Bundle();
+
+                                    args.putString("admin", user_type);
                                     args.putString("type", "noadmin");
                                     args.putString("ABC", "A");
+                                    args.putString("goal", user_real_goal);
+                                    args.putString("tot_cal", user_goal);
+                                    args.putString("firstname", user_name);
+                                    args.putString("lastname", user_lastname);
+                                    args.putString("uri", user_uri);
+                                    args.putString("phone", user_phone);
+                                    args.putString("email", user_email);
+
                                     selectedFragment.setArguments(args);
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).addToBackStack(null).commit();
                                 }

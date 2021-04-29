@@ -3,11 +3,9 @@ package it.iacorickvale.progettoprogmob.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -20,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -35,14 +31,10 @@ import java.util.Map;
 
 import it.iacorickvale.progettoprogmob.R;
 import it.iacorickvale.progettoprogmob.adapters.EserciziAdapter;
-import it.iacorickvale.progettoprogmob.firebase.CardsFunctions;
 import it.iacorickvale.progettoprogmob.firebase.ExerciseFunctions;
 import it.iacorickvale.progettoprogmob.utilities.Esercizi;
 
-import static it.iacorickvale.progettoprogmob.firebase.DatabaseReferences.getUser;
-import static it.iacorickvale.progettoprogmob.firebase.DatabaseReferences.getUserById;
 import static it.iacorickvale.progettoprogmob.firebase.DatabaseReferences.listExCard;
-import static it.iacorickvale.progettoprogmob.firebase.ExerciseFunctions.orderListByDiff;
 
 
 public class FragmentEsercizi extends Fragment {
@@ -79,7 +71,6 @@ public class FragmentEsercizi extends Fragment {
         RecyclerView.ItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(divider);
 
-
         assert this.getArguments() != null;
         path = this.getArguments().getString("path");
         ref = this.getArguments().getString("ref");
@@ -107,7 +98,11 @@ public class FragmentEsercizi extends Fragment {
                                         mp = document.getData();
                                         Esercizi ex = new Esercizi(mp.get("description").toString(),
                                                 mp.get("difficulty").toString(),
-                                                mp.get("name").toString());
+                                                mp.get("name").toString(),
+                                                mp.get("cal").toString(),
+                                                mp.get("uri").toString()
+
+                                        );
                                         listEserciziScheda.add(ex);
                                         EserciziAdapter.notifyDataSetChanged();
                                     }
@@ -137,7 +132,10 @@ public class FragmentEsercizi extends Fragment {
                                             mp = document.getData();
                                             Esercizi ex = new Esercizi(mp.get("description").toString(),
                                                     mp.get("difficulty").toString(),
-                                                    mp.get("name").toString());
+                                                    mp.get("name").toString(),
+                                                    mp.get("cal").toString(),
+                                                    mp.get("uri").toString()
+                                            );
                                             listEserciziScheda.add(ex);
                                             EserciziAdapter.notifyDataSetChanged();
                                         }
@@ -173,9 +171,12 @@ public class FragmentEsercizi extends Fragment {
                                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    Esercizi ex = new Esercizi(document.get("Descrizione").toString(),
-                                                            document.get("Difficoltà").toString(),
-                                                            document.get("Nome").toString());
+                                                    Esercizi ex = new Esercizi(document.get("description").toString(),
+                                                            document.get("difficulty").toString(),
+                                                            document.get("name").toString(),
+                                                            document.get("cal").toString(),
+                                                            document.get("uri").toString()
+                                                    );
                                                     boolean aux = false;
                                                         listEserciziAdd.add(ex);
                                                         EserciziAdapter.notifyDataSetChanged();
@@ -194,8 +195,6 @@ public class FragmentEsercizi extends Fragment {
             Toast.makeText(getContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         EserciziAdapter.notifyDataSetChanged();
-
-
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -266,7 +265,7 @@ public class FragmentEsercizi extends Fragment {
         });
 
         EserciziAdapter.notifyDataSetChanged();
-
+        listEserciziScheda.clear();
         listEserciziAdd.clear();
         return view;
     }

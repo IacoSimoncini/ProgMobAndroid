@@ -1,10 +1,6 @@
 package it.iacorickvale.progettoprogmob.firebase;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.provider.DocumentsContract;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,19 +8,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import io.opencensus.common.ServerStatsFieldEnums;
-import it.iacorickvale.progettoprogmob.adapters.CardsAdapter;
 import it.iacorickvale.progettoprogmob.utilities.Cards;
 import it.iacorickvale.progettoprogmob.utilities.Esercizi;
 
@@ -47,7 +34,7 @@ public class CardsFunctions {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for ( QueryDocumentSnapshot documentSnapshots : task.getResult()){
-                        Esercizi e = new Esercizi(documentSnapshots.get("description").toString(), documentSnapshots.get("difficulty").toString(), documentSnapshots.get("name").toString());
+                        Esercizi e = new Esercizi(documentSnapshots.get("description").toString(), documentSnapshots.get("difficulty").toString(), documentSnapshots.get("name").toString(), documentSnapshots.get("cal").toString(), documentSnapshots.get("uri").toString());
                         ExerciseFunctions.addExToCard(ref,newName,e,currentDay);
                     }
                 }
@@ -72,7 +59,7 @@ public class CardsFunctions {
                                 Log.d("TRUE", document.get("type").toString());
                                 ret[0] = true;
                             }else{
-                                Log.d("UN" , " CACCHIO");
+                                Log.d("UN" , " C");
                             }
                         }
                     }
@@ -87,7 +74,7 @@ public class CardsFunctions {
             Log.d("RET" , " VALE");
             return ret[0];
         }else{
-            Log.d("RET" , "NOOOON VALE");
+            Log.d("RET" , "NON VALE");
             return false;
         }
     }

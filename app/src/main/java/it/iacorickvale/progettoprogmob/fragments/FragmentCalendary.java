@@ -112,7 +112,7 @@ public class FragmentCalendary extends Fragment {
             public void onClick(View v) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 View dialogView = inflater.inflate(R.layout.switch_type, null);
-                builder.setTitle("CHOOSE TYPE:");
+                builder.setTitle("Choose from 3 type of month training:");
                 final Bundle args = new Bundle();
                 args.putString("type", controlIfAd);
                 args.putString("u_id", uid);
@@ -161,8 +161,7 @@ public class FragmentCalendary extends Fragment {
                                     fragmentCalendary.setArguments(args);
                                     FragmentManager fm = (getActivity()).getSupportFragmentManager();
                                     FragmentTransaction ft = fm.beginTransaction();
-                                    ft.replace(R.id.fragment_container, fragmentCalendary);
-                                    ft.commit();
+                                    ft.replace(R.id.fragment_container, fragmentCalendary).addToBackStack(null).commit();
                                 }catch (Exception e){
                                     Toast.makeText(getContext().getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }

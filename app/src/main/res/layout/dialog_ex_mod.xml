@@ -16,6 +16,15 @@
         android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/cal_ex_mod"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:fontFamily="@font/roboto"
+        android:hint="@string/cal_ex"
+        android:textSize="16sp" />
+
+    <EditText
         android:id="@+id/desc_ex_mod"
         android:layout_gravity="center"
         android:layout_width="match_parent"

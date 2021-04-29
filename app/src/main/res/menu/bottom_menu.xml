@@ -18,7 +18,7 @@
     <item
         android:id="@+id/menu_info"
         android:checked="false"
-        android:icon="@android:drawable/ic_menu_info_details"
+        android:icon="@drawable/ic_burn"
         android:title="@string/menu_info" />
 
 </menu>

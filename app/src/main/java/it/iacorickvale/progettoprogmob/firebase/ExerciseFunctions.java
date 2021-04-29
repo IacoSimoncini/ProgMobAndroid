@@ -1,6 +1,6 @@
 package it.iacorickvale.progettoprogmob.firebase;
 
-import android.provider.ContactsContract;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -8,17 +8,16 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import it.iacorickvale.progettoprogmob.R;
@@ -28,11 +27,30 @@ public class ExerciseFunctions {
 
 
 
-    public static void createEx( String desc, String diff, String name){
-        Map<String, String> ex = new HashMap<>();
-        ex.put("Descrizione", desc);
-        ex.put("Difficoltà", diff);
-        ex.put("Nome", name);
+    public static void createEx(String desc, String diff, final String name, String cal, String uri){
+        final Map<String, String> ex = new HashMap<>();
+        ex.put("description", desc);
+        ex.put("difficulty", diff);
+        ex.put("name", name);
+        ex.put("cal", cal);
+        if(!uri.equals("")){
+            ex.put("uri", uri);
+        }
+        else {
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference uriStorage = storageRef.child("/exercises/Default/default.mp4");
+            uriStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Log.d("URI", uri.toString());
+                    ex.put("uri", uri.toString());
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("Esercizi")
+                            .document(name)
+                            .set(ex);
+                }
+            });
+        }
         DatabaseReferences.getExercises()
                 .document(name)
                 .set(ex);
@@ -54,8 +72,8 @@ public class ExerciseFunctions {
                 .set(ex);
     }
 
-    public static void modifyEx(String Name, String Desc , String Diff){
-        Esercizi e = new Esercizi(Name, Desc, Diff);
+    public static void modifyEx(String Name, String Desc , String Diff, String Cal, String Uri){
+        Esercizi e = new Esercizi(Name, Desc, Diff, Cal, Uri);
         DatabaseReferences.getExercises().document(Name).set(e);
     }
 
@@ -63,8 +81,9 @@ public class ExerciseFunctions {
         DatabaseReferences.listExCard(ref, path, day).document(name).delete();
     }
 
-    public static void updateExCard(final String ID, final String name , final String desc , final String diff ){
-        final ArrayList<String>days = new ArrayList<String>(Arrays.asList("MON", "TUE" ,"WED" , "THU" , "FRI" , "SAT"));
+    public static void updateExCard(final String ID, final String name , final String desc , final String diff , final String cal, final String uri){
+        //final ArrayList<String>days = new ArrayList<String>(Arrays.asList("MON", "TUE" ,"WED" , "THU" , "FRI" , "SAT"));
+        final ArrayList<String>days = new ArrayList<String>(Arrays.asList("1", "2" ,"3" , "4" , "5" , "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18","19", "20", "21", "22", "23", "24", "25", "26", "27", "28"));
         DatabaseReferences.getUsers().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -72,24 +91,70 @@ public class ExerciseFunctions {
                     for(final String day : days){
                         for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
                             final String UserID = new String(documentSnapshots.getId());
-                            Log.d("controllo l'utente", UserID);
+                            Log.d("Utente per modifica", UserID);
                             DatabaseReferences.listCards(UserID, day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task ) {
                                     if (task.isSuccessful()) {
                                         for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
                                             final String CardID = new String(documentSnapshots.getId());
-                                            Log.d("controllo la scheda", CardID);
+                                            Log.d("Scheda per modifica", CardID);
                                             DatabaseReferences.listExCard(UserID , CardID, day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                     if(task.isSuccessful()){
                                                         for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
-                                                            Log.d("controllo l'esercizio'",documentSnapshots.getId());
+                                                            Log.d("Esercizio per modifica'",documentSnapshots.getId());
                                                             if (documentSnapshots.getId().equals(ID)){
                                                                 Log.d("esercizio da aggiornare", documentSnapshots.getId());
                                                                 deleteExCard(UserID , CardID , documentSnapshots.getId().toString(), day);
-                                                                addExToCard(UserID , CardID , new Esercizi(desc, diff , name), day);
+                                                                addExToCard(UserID , CardID , new Esercizi(desc, diff , name, cal, uri), day);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public static void deleteFromExCard(final String ID, final String name , final String desc , final String diff , final String cal, final String uri){
+        //final ArrayList<String>days = new ArrayList<String>(Arrays.asList("MON", "TUE" ,"WED" , "THU" , "FRI" , "SAT"));
+        final ArrayList<String>days = new ArrayList<String>(Arrays.asList("1", "2" ,"3" , "4" , "5" , "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18","19", "20", "21", "22", "23", "24", "25", "26", "27", "28"));
+        DatabaseReferences.getUsers().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for(final String day : days){
+                        for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
+                            final String UserID = new String(documentSnapshots.getId());
+                            Log.d("Utente per modifica", UserID);
+                            DatabaseReferences.listCards(UserID, day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task ) {
+                                    if (task.isSuccessful()) {
+                                        for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
+                                            final String CardID = new String(documentSnapshots.getId());
+                                            Log.d("Scheda per modifica", CardID);
+                                            DatabaseReferences.listExCard(UserID , CardID, day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if(task.isSuccessful()){
+                                                        for (final QueryDocumentSnapshot documentSnapshots : task.getResult()){
+                                                            Log.d("Esercizio per modifica'",documentSnapshots.getId());
+                                                            if (documentSnapshots.getId().equals(ID)){
+                                                                Log.d("esercizio da aggiornare", documentSnapshots.getId());
+                                                                deleteExCard(UserID , CardID , documentSnapshots.getId().toString(), day);
+                                                                //addExToCard(UserID , CardID , new Esercizi(desc, diff , name, cal, uri), day);
                                                             }
                                                         }
                                                     }
@@ -118,9 +183,9 @@ public class ExerciseFunctions {
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                             if (document.getId().equals(name)) {
                                 aux[0] = true;
-                                Log.d("esercizio uguale: ", document.get("Nome").toString());
+                                Log.d("esercizio uguale: ", document.get("name").toString());
                             } else {
-                                Log.d("esercizio diverso2: ", document.get("Nome").toString());
+                                Log.d("esercizio diverso2: ", document.get("name").toString());
                             }
                         }
                     }

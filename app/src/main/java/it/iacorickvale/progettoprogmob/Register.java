@@ -82,6 +82,8 @@ public class Register extends AppCompatActivity {
                 final String firstname = mfirstname.getText().toString().trim();
                 final String lastname = mlastname.getText().toString().trim();
                 final String email = mEmail.getText().toString().trim();
+                final String goal = null;
+                final String real_goal = null;
                 String password = mPassword.getText().toString().trim();
                 final String phone = mPhone.getText().toString();
 
@@ -122,7 +124,7 @@ public class Register extends AppCompatActivity {
                             user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    writeUserToDb(firstname, lastname, phone, email, user.getUid());
+                                    writeUserToDb(firstname, lastname, phone, email, user.getUid(), goal, real_goal);
                                     Intent intent = new Intent();
                                     intent.putExtra("firstname", mfirstname.getText().toString());
                                     intent.putExtra("lastname", mlastname.getText().toString());
@@ -150,13 +152,15 @@ public class Register extends AppCompatActivity {
 
     }
 
-    private void writeUserToDb(String firstname, String lastname, String phone, String email, final String uid) {
+    private void writeUserToDb(String firstname, String lastname, String phone, String email, final String uid, String tot_cal, String goal) {
         final Map<String, Object> user = new HashMap<>();
         user.put("firstname", firstname);
         user.put("lastname", lastname);
         user.put("phone", phone);
         user.put("email", email);
         user.put("admin", "noadmin");
+        user.put("tot_cal", 0);
+        user.put("goal", 500);
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference uriStorage = storageRef.child("/users/Default/default.png");
         uriStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

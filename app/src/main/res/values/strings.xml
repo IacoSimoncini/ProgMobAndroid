@@ -13,7 +13,7 @@
     <string name="creaScheda">Create Card</string>
     <string name="eliminaScheda">Delete Cards</string>
     <string name="register">Register</string>
-    <string name="menu_info">Info</string>
+    <string name="menu_info">Burn</string>
     <string name="description">Description:</string>
     <string name="current">Currently on Mode:</string>
     <string name="already_registered_log_in">Login</string>
@@ -34,6 +34,7 @@
     <string name="menu_users">Users</string>
     <string name="name_ex">Name</string>
     <string name="desc_ex">Description</string>
+    <string name="cal_ex">Calories (number)</string>
     <string name="diff_ex">Difficulty</string>
     <string name="rename_card">Rename Card</string>
     <string name="menu_ex">Exercises</string>

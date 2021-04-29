@@ -1,6 +1,7 @@
 package it.iacorickvale.progettoprogmob.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class FragmentAdmin extends Fragment {
         recyclerView = view.findViewById(R.id.rv_admin);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        RecyclerView.ItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        final RecyclerView.ItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(divider);
 
         // Name current user
@@ -71,9 +72,16 @@ public class FragmentAdmin extends Fragment {
                                                     @Override
                                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                         if(!Objects.equals(document.get("admin"), "admin")) {
-                                                                Users users = new Users(document.get("firstname").toString(), document.get("lastname").toString(), document.getId(), document.get("uri").toString());
-                                                                listUsers.add(users);
-                                                                adminAdapter.notifyDataSetChanged();
+                                                            Log.d("USERS DATA", document.get("firstname").toString());
+                                                            Log.d("USERS DATA", document.get("lastname").toString());
+                                                            Log.d("USERS DATA", document.getId());
+                                                            Log.d("USERS DATA", document.get("uri").toString());
+                                                            Log.d("USERS DATA", document.get("tot_cal").toString());
+                                                            Log.d("USERS DATA", document.get("goal").toString());
+
+                                                            Users users = new Users(document.get("firstname").toString(), document.get("lastname").toString(), document.getId(), document.get("uri").toString(), document.get("tot_cal").toString(), document.get("goal").toString());
+                                                            listUsers.add(users);
+                                                            adminAdapter.notifyDataSetChanged();
                                                         }
                                                     }
                                                 });

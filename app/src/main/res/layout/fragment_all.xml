@@ -29,7 +29,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Click on the names to see full description"
+        android:text="Click on the names to see videos and descriptions"
         android:gravity="center"
         android:textColor="@color/black"
         android:layout_marginTop="80dp"/>

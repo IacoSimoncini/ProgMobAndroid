@@ -1,7 +1,9 @@
 package it.iacorickvale.progettoprogmob.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +12,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.iacorickvale.progettoprogmob.MainActivity;
 import it.iacorickvale.progettoprogmob.R;
 import it.iacorickvale.progettoprogmob.adapters.CardsAdapter;
 import it.iacorickvale.progettoprogmob.firebase.CardsFunctions;
@@ -48,11 +55,16 @@ public class FragmentCards extends Fragment  {
     private Integer ndays = 0;
     private ImageButton btnAdd;
     private Boolean aux;
+    Button upload;
+    Fragment fragmentVideo;
+    VideoView videoView;
     private RecyclerView recyclerViewCalendary;
     private String currentDay;
     private String current_uid;
     private Boolean whichSet;
     private String ABC;
+    private Context context;
+    MediaController mediaController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +86,10 @@ public class FragmentCards extends Fragment  {
         recyclerView.addItemDecoration(divider);
 
         days = fillDays(days, ndays);
+
+        recyclerView.findViewById(R.id.video_view);
+
+
         // Fill listCards with collections path
         try {
             if (control.equals("admin")) {

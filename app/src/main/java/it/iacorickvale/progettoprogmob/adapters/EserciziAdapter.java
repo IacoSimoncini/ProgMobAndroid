@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -34,10 +37,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import it.iacorickvale.progettoprogmob.MainActivity;
 import it.iacorickvale.progettoprogmob.R;
 import it.iacorickvale.progettoprogmob.firebase.CardsFunctions;
 import it.iacorickvale.progettoprogmob.firebase.DatabaseReferences;
 import it.iacorickvale.progettoprogmob.firebase.ExerciseFunctions;
+import it.iacorickvale.progettoprogmob.fragments.FragmentVideo;
 import it.iacorickvale.progettoprogmob.utilities.Esercizi;
 
 import static it.iacorickvale.progettoprogmob.firebase.ExerciseFunctions.orderListByDiff;
@@ -48,6 +53,7 @@ public class EserciziAdapter extends RecyclerView.Adapter<EserciziAdapter.CViewH
     private ArrayList<Esercizi> struttura;
     private Context context;
     String path, ref;
+    private FragmentVideo fragmentVideo;
     boolean isAdmin;
     private String currentDay;
 
@@ -151,19 +157,35 @@ public class EserciziAdapter extends RecyclerView.Adapter<EserciziAdapter.CViewH
 
         holder.textNome.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                try{
-                    AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
-                    View dialogView = inflater.inflate(R.layout.description_ex, null);
-                    alertDialog.setView(dialogView);
-                    TextView descText = dialogView.findViewById(R.id.text_descrizione);
-                    descText.setGravity(Gravity.CENTER);
-                    descText.setText(struttura.get(position).getDescription());
-                    Button btn = dialogView.findViewById(R.id.btn_dlg);
-                    btn.setGravity(Gravity.CENTER);
-                    alertDialog.show();
-                }catch(Exception e){
-                    Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();                }
+            public void onClick(final View v) {
+                try {
+                    final String uid = ref;
+                    //cliccando sul nome del singolo esercizio voglio passare al Fragment Video, passando come parametri la descrizione dell'esercizio
+                    //e l'uri del video da passare poi alla Video View
+                    fragmentVideo = new FragmentVideo();
+                    Bundle args = new Bundle();
+                    args.putString("name", struttura.get(position).getName());
+                    args.putString("description", struttura.get(position).getDescription());
+                    args.putString("difficulty", struttura.get(position).getDifficulty());
+                    args.putString("cal", struttura.get(position).getCal());
+                    args.putString("uri", struttura.get(position).getUri());
+                    args.putString("u_id" , uid);
+                    args.putString("type", "noadmin");
+
+                    Log.d("GEBE", struttura.get(position).getName());
+                    Log.d("GEBE", struttura.get(position).getDescription());
+                    Log.d("GEBE", struttura.get(position).getDifficulty());
+                    Log.d("GEBE", struttura.get(position).getCal());
+                    Log.d("GEBE", struttura.get(position).getUri());
+
+                    fragmentVideo.setArguments(args);
+                    FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.fragment_container, fragmentVideo).addToBackStack(null).commit();
+
+                }catch (Exception e){
+                    Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

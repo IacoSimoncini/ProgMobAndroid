@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.provider.DocumentsContract;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,39 +20,40 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
+import it.iacorickvale.progettoprogmob.MainActivity;
 import it.iacorickvale.progettoprogmob.R;
 import it.iacorickvale.progettoprogmob.firebase.DatabaseReferences;
 import it.iacorickvale.progettoprogmob.firebase.ExerciseFunctions;
+import it.iacorickvale.progettoprogmob.fragments.FragmentVideo;
 import it.iacorickvale.progettoprogmob.utilities.Esercizi;
 
 public class AdapterAll extends RecyclerView.Adapter<AdapterAll.CViewHolder> {
+    private Context context;
     private ArrayList<Esercizi> struttura;
     private LayoutInflater inflater;
+    private FragmentVideo fragmentVideo;
     private String defName;
     private String defDesc;
     private String defDiff;
+    private String defCal;
+    private String defUri;
 
     public AdapterAll(Context ctx, ArrayList<Esercizi> struttura) {
         this.inflater = LayoutInflater.from(ctx);
         this.struttura = struttura;
+        this.context = inflater.getContext();
     }
     public class CViewHolder extends RecyclerView.ViewHolder {
         TextView name;
@@ -81,23 +82,38 @@ public class AdapterAll extends RecyclerView.Adapter<AdapterAll.CViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull AdapterAll.CViewHolder holder, final int position) {
         holder.name.setText(struttura.get(position).getName());
+        //Log.d("SUPER TEST", struttura.get(position).getUri());
         //holder.name.setText(struttura.get(position).getDescription());
-        String difficulty =struttura.get(position).getDifficulty();
+        String difficulty = struttura.get(position).getDifficulty();
         holder.img.setImageResource(ExerciseFunctions.setImageEx(difficulty));
         holder.name.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(final View v) {
-                final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
-                View dialogView = inflater.inflate(R.layout.description_ex, null);
-                alertDialog.setView(dialogView);
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                //alertDialog.setMessage(struttura.get(position).getDescription());
-                TextView descText = dialogView.findViewById(R.id.text_descrizione);
-                descText.setGravity(Gravity.CENTER);
-                descText.setText(struttura.get(position).getDescription());
-                Button btn = dialogView.findViewById(R.id.btn_dlg);
-                btn.setGravity(Gravity.CENTER);
-                alertDialog.show();
+                try {
+                    fragmentVideo = new FragmentVideo();
+                    Bundle args = new Bundle();
+                    args.putString("name", struttura.get(position).getName());
+                    args.putString("description", struttura.get(position).getDescription());
+                    args.putString("difficulty", struttura.get(position).getDifficulty());
+                    args.putString("cal", struttura.get(position).getCal());
+                    args.putString("uri", struttura.get(position).getUri());
+
+                    args.putString("type", "admin");
+
+                    //controllo dati
+                    Log.d("DENTRO ADAPTER_ALL", struttura.get(position).getName());
+                    Log.d("DENTRO ADAPTER_ALL", struttura.get(position).getDescription());
+                    Log.d("DENTRO ADAPTER_ALL", struttura.get(position).getDifficulty());
+                    Log.d("DENTRO ADAPTER_ALL", struttura.get(position).getCal());
+                    Log.d("DENTRO ADAPTER_ALL", struttura.get(position).getUri());
+
+                    fragmentVideo.setArguments(args);
+                    FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.fragment_container, fragmentVideo).addToBackStack(null).commit();
+                }catch (Exception e){
+                    Toast.makeText(context.getApplicationContext(), "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -110,16 +126,19 @@ public class AdapterAll extends RecyclerView.Adapter<AdapterAll.CViewHolder> {
                 alertDialog.setView(dialogView);
                 final EditText name = dialogView.findViewById(R.id.name_ex_mod);
                 final EditText description = dialogView.findViewById(R.id.desc_ex_mod);
+                final EditText calories = dialogView.findViewById(R.id.cal_ex_mod);
                 final Spinner difficulty = dialogView.findViewById(R.id.diff_ex_mod);
                 Log.d("KKKKKKK: id " , struttura.get(position).getName());
                 DatabaseReferences.getExById(struttura.get(position).getName()).get().addOnCompleteListener(
                         new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                defName = new String(task.getResult().get("Nome").toString());
-                                defDesc = new String(task.getResult().get("Descrizione").toString());
-                                defDiff = new String(task.getResult().get("Difficoltà").toString());
-                                Log.d("1)" , defName+ defDesc + defDiff);
+                                defName = new String(task.getResult().get("name").toString());
+                                defDesc = new String(task.getResult().get("description").toString());
+                                defDiff = new String(task.getResult().get("difficulty").toString());
+                                defCal = new String(task.getResult().get("cal").toString());
+                                defUri = new String(task.getResult().get("uri").toString());
+                                Log.d("1)" , defName+ defDesc + defDiff + defCal + defUri);
                             }
                         }
                 );
@@ -134,6 +153,10 @@ public class AdapterAll extends RecyclerView.Adapter<AdapterAll.CViewHolder> {
                                 else if( description.getText().toString().length() > 50)
                                 {
                                     Toast.makeText(v.getContext(), "Impossible to Update:" + "\nDescription must be <20", Toast.LENGTH_SHORT).show();
+                                }
+                                else if(isDoubleOrInt(calories.getText().toString())== -1)
+                                {
+                                    Toast.makeText(v.getContext(), "Impossible to Create:" + "\nCalories must be an int", Toast.LENGTH_SHORT).show();
                                 }
                                 else {
                                 Log.d("2)" , "controllo se è già presente");
@@ -159,15 +182,22 @@ public class AdapterAll extends RecyclerView.Adapter<AdapterAll.CViewHolder> {
                                     } else {
                                         newDiff = new String(difficulty.getSelectedItem().toString());
                                     }
+
+                                    String newCal;
+                                    if (calories.getText().toString().equals("")){
+                                        newCal = new String(defCal);
+                                    } else {
+                                        newCal = new String(calories.getText().toString());
+                                    }
+
                                     Log.d("AA: ", newDiff);
                                     ExerciseFunctions.deleteEx(struttura.get(position).getName());
-                                    ExerciseFunctions.createEx(newDesc , newDiff , newName);
-                                    Log.d("mmm", "k");
-                                    ExerciseFunctions.updateExCard(defName , newName, newDesc, newDiff);
-                                    Log.d("mmm", "h");
-                                    struttura.set(position , new Esercizi(newDesc , newDiff , newName));
-                                    notifyItemChanged(position , new Esercizi(newDesc , newDiff , newName));
+                                    ExerciseFunctions.createEx(newDesc , newDiff , newName, newCal, defUri);
+                                    ExerciseFunctions.updateExCard(defName , newName, newDesc, newDiff, newCal, defUri);
+                                    struttura.set(position , new Esercizi(newDesc , newDiff , newName, newCal, defUri ));
+                                    notifyItemChanged(position , new Esercizi(newDesc , newDiff , newName, newCal, defUri));
                                     notifyDataSetChanged();
+                                    Toast.makeText(v.getContext(), "Update Done", Toast.LENGTH_SHORT).show();
                                 }else{
                                     Log.d( "onClick: " , "non lo Modifico");
                                 }
@@ -203,8 +233,9 @@ public class AdapterAll extends RecyclerView.Adapter<AdapterAll.CViewHolder> {
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if(task.isSuccessful()){
                                         for(DocumentSnapshot document : task.getResult()){
-                                            if(document.get("Nome").toString().equals(struttura.get(position).getName())){
+                                            if(document.get("name").toString().equals(struttura.get(position).getName())){
                                                 Log.d("esercizio rimosso: ", struttura.get(position).getName());
+                                                ExerciseFunctions.deleteFromExCard(struttura.get(position).getName() , defName, defDesc, defDiff, defCal, defUri);
                                                 DatabaseReferences.getExById(document.getId())
                                                         .delete();
                                                 removeAt(position);
@@ -245,4 +276,18 @@ public class AdapterAll extends RecyclerView.Adapter<AdapterAll.CViewHolder> {
         notifyItemChanged(position, struttura.size());
     }
 
+    public static int isDoubleOrInt(String num){
+        try{
+            Integer.parseInt(num);
+            return 0;
+        }catch(Exception exception){
+            try{
+                Double.parseDouble(num);
+                return 1;
+            }catch(Exception e){
+                return -1;
+            }
+        }
+
+}
 }
